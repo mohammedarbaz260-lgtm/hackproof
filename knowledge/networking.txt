@@ -1,0 +1,40 @@
+NETWORKING BASICS
+
+IP ADDRESS
+An IP address identifies a device on a network. IPv4 addresses use 32 bits, such as 192.168.1.10.
+
+TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+UDP
+UDP is a connectionless transport protocol that is faster and has less overhead than TCP, but it does not guarantee delivery.
+
+PORT
+A port identifies a logical service endpoint on a host.
+
+COMMON PORTS
+20/21 - FTP
+22 - SSH
+23 - Telnet
+25 - SMTP
+53 - DNS
+80 - HTTP
+443 - HTTPS
+
+DNS
+DNS translates domain names such as example.com into IP addresses.
+
+HTTP
+HTTP is a protocol used for transferring web resources.
+
+HTTPS
+HTTPS is HTTP protected by TLS encryption.
+
+ROUTER
+A router forwards packets between different networks.
+
+SWITCH
+A network switch connects devices within a local network and forwards Ethernet frames.
+
+FIREWALL
+A firewall controls network traffic according to security rules.

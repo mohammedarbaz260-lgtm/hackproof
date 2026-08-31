@@ -1,0 +1,367 @@
+from dotenv import load_dotenv
+load_dotenv(".env")
+from flask import Flask, request, jsonify
+from google import genai
+import markdown
+import os
+import time
+from pathlib import Path
+
+from analysis_router import handle_analysis_request
+from tools import run_safe_tool, SAFE_COMMANDS
+
+
+def load_knowledge():
+    knowledge = ""
+    knowledge_dir = Path("knowledge")
+
+    if not knowledge_dir.exists():
+        return knowledge
+
+    for filename in sorted(knowledge_dir.iterdir()):
+        if filename.suffix.lower() == ".txt":
+            knowledge += "\n--- " + filename.name + " ---\n"
+            knowledge += filename.read_text(encoding="utf-8")
+
+    return knowledge
+
+
+def retrieve_knowledge(question):
+    knowledge = load_knowledge()
+    if not knowledge.strip():
+        return "No local knowledge available."
+
+    question_words = set(question.lower().split())
+    sections = knowledge.split("--- ")
+    scored = []
+
+    for section in sections:
+        words = set(section.lower().split())
+        score = len(question_words & words)
+        if score > 0:
+            scored.append((score, section))
+
+    scored.sort(key=lambda x: x[0], reverse=True)
+    if scored:
+        return "--- ".join(section for score, section in scored[:3])
+
+    return "No directly relevant information found."
+
+app = Flask(__name__)
+client = genai.Client()
+
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI</title>
+    <style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+header {
+    padding: 18px 24px;
+    background: #111827;
+    border-bottom: 1px solid #334155;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.container {
+    width: min(1000px, 94%);
+    margin: 24px auto;
+}
+
+#chat {
+    min-height: 65vh;
+    padding: 18px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 14px 16px;
+    margin: 12px 0;
+    border-radius: 12px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background: #1e3a5f;
+    margin-left: 12%;
+}
+
+.message.bot {
+    background: #334155;
+    margin-right: 12%;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    position: sticky;
+    bottom: 0;
+}
+
+input {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #475569;
+    border-radius: 10px;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 16px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #60a5fa;
+}
+
+button {
+    padding: 15px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 700px) {
+    .container {
+        width: 96%;
+        margin: 12px auto;
+    }
+
+    #chat {
+        min-height: 70vh;
+        padding: 10px;
+    }
+
+    .message.user,
+    .message.bot {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .input-area {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>🛡️ HACKPROOF AI</header>
+
+<div class="container">
+
+    <div id="chat">
+        <div class="message bot">
+            <b>HackProof:</b><br>
+            Hello! I am HackProof AI. Ask me a cybersecurity question.
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input id="question"
+               placeholder="Ask HackProof..."
+               onkeydown="if(event.key==='Enter') sendMessage()">
+
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+async function sendMessage() {
+
+    const input = document.getElementById("question");
+    const question = input.value.trim();
+
+    if (!question) return;
+
+    const chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="message user">
+            <b>You:</b> ${question}
+        </div>
+    `;
+
+    input.value = "";
+
+    try {
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                question: question
+            })
+        });
+
+        const data = await response.json();
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                ${data.answer}
+            </div>
+        `;
+
+    } catch (error) {
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                Error connecting to HackProof server.
+            </div>
+        `;
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
+"""
+
+MEMORY_FILE = Path("memory.txt")
+
+def load_memory():
+    if not MEMORY_FILE.exists():
+        return ""
+    return MEMORY_FILE.read_text(encoding="utf-8")[-12000:]
+
+def save_memory(question, answer):
+    entry = f"\nUser: {question}\nHackProof: {answer}\n"
+    with MEMORY_FILE.open("a", encoding="utf-8") as f:
+        f.write(entry)
+
+
+@app.route("/")
+def home():
+    return HTML
+
+
+@app.route("/chat", methods=["POST"])
+def chat():
+
+    data = request.get_json() or {}
+    question = data.get("question", "").strip()
+
+    if not question:
+        return jsonify({
+            "answer": "Please enter a question."
+        })
+
+    if question.lower() == "list tools":
+        return jsonify({
+            "answer": "<b>Available safe tools:</b><br>" + "<br>".join(SAFE_COMMANDS.keys())
+        })
+
+    if question.lower().startswith("run tool "):
+        tool_name = question[9:].strip()
+
+        if tool_name not in SAFE_COMMANDS:
+            return jsonify({
+                "answer": "Tool not allowed."
+            })
+
+        tool_result = run_safe_tool(tool_name)
+
+        return jsonify({
+            "answer": tool_result.replace("\n", "<br>")
+        })
+
+    result = handle_analysis_request(question)
+
+    if result is not None:
+        return jsonify({
+            "answer": result.replace("\n", "<br>")
+        })
+
+    try:
+        relevant_knowledge = retrieve_knowledge(question)
+        conversation_memory = load_memory()
+
+        prompt = (
+            "You are HackProof AI, a cybersecurity learning assistant.\n\n"
+            "Use the retrieved local knowledge when relevant.\n"
+            "Only provide cybersecurity guidance for authorized systems, "
+            "labs, and learning environments.\n\n"
+            "RETRIEVED KNOWLEDGE:\n"
+            + relevant_knowledge
+            + "\n\nCONVERSATION MEMORY:\n"
+        + conversation_memory
++ "\n\nUSER QUESTION:\n"
+            + question
+            + "\n\nAnswer clearly for the user."
+        )
+
+        response = None
+        for attempt in range(3):
+            try:
+                response = client.models.generate_content(
+                    model="gemini-3.7-flash",
+                    contents=prompt
+                )
+                break
+            except Exception as e:
+                if attempt == 2:
+                    raise
+                time.sleep(2 ** attempt)
+
+        answer_html = markdown.markdown(
+            response.text,
+            extensions=["tables", "fenced_code"]
+        )
+
+        save_memory(question, response.text)
+
+        return jsonify({
+            "answer": answer_html
+        })
+
+    except Exception as e:
+        local_answer = retrieve_knowledge(question)
+        if local_answer and local_answer != "No directly relevant information found.":
+            return jsonify({
+                "answer": markdown.markdown(local_answer, extensions=["tables", "fenced_code"])
+            })
+        return jsonify({
+            "answer": "Gemini is temporarily unavailable. Please try again shortly."
+        })
+
+
+if __name__ == "__main__":
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )

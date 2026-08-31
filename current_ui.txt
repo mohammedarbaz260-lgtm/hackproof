@@ -1,0 +1,224 @@
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI</title>
+    <style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+header {
+    padding: 18px 24px;
+    background: #111827;
+    border-bottom: 1px solid #334155;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.container {
+    width: min(1000px, 94%);
+    margin: 24px auto;
+}
+
+#chat {
+    min-height: 65vh;
+    padding: 18px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 14px 16px;
+    margin: 12px 0;
+    border-radius: 12px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background: #1e3a5f;
+    margin-left: 12%;
+}
+
+.message.bot {
+    background: #334155;
+    margin-right: 12%;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    position: sticky;
+    bottom: 0;
+}
+
+input {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #475569;
+    border-radius: 10px;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 16px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #60a5fa;
+}
+
+button {
+    padding: 15px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 700px) {
+    .container {
+        width: 96%;
+        margin: 12px auto;
+    }
+
+    #chat {
+        min-height: 70vh;
+        padding: 10px;
+    }
+
+    .message.user,
+    .message.bot {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .input-area {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>🛡️ HACKPROOF AI</header>
+
+<div class="container">
+
+    <div id="chat">
+        <div class="message bot">
+            <b>HackProof:</b><br>
+            Hello! I am HackProof AI. Ask me a cybersecurity question.
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input id="question"
+               placeholder="Ask HackProof..."
+               onkeydown="if(event.key==='Enter') sendMessage()">
+
+        <button onclick="sendMessage()">Send</button><button onclick="clearChat()">Clear</button>
+    </div>
+
+</div>
+
+<script>
+async function sendMessage() {
+
+    const input = document.getElementById("question");
+    const question = input.value.trim();
+
+    if (!question) return;
+
+    const chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="message user">
+            <b>You:</b> ${question}
+        </div>
+    `;
+
+    input.value = "";
+
+    try {
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                question: question
+            })
+        });
+
+        const data = await response.json();
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                ${data.answer}
+            </div>
+        `;
+
+    } catch (error) {
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                Error connecting to HackProof server.
+            </div>
+        `;
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function clearChat() {
+    const chat = document.getElementById("chat");
+    chat.innerHTML = `
+        <div class="message bot">
+            <b>HackProof:</b><br>
+            Hello! I am HackProof AI. Ask me a cybersecurity question.
+        </div>
+    `;
+}
+\n</script>
+
+</body>
+</html>
+"""
+
+MEMORY_FILE = Path("memory.txt")
+
+def load_memory():
+    if not MEMORY_FILE.exists():
+        return ""
+    return MEMORY_FILE.read_text(encoding="utf-8")[-12000:]
+
+def save_memory(question, answer):
+    entry = f"\nUser: {question}\nHackProof: {answer}\n"
+    with MEMORY_FILE.open("a", encoding="utf-8") as f:
+        f.write(entry)
+
+

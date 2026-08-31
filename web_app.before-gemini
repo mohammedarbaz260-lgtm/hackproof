@@ -1,0 +1,191 @@
+from flask import Flask, request, jsonify
+
+from analysis_router import handle_analysis_request
+
+app = Flask(__name__)
+
+HTML = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px;
+            background: #111827;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 70%;
+            margin: 40px auto;
+        }
+
+        #chat {
+            min-height: 350px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 10px;
+        }
+
+        .user {
+            background: #334155;
+        }
+
+        .bot {
+            background: #475569;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 16px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>🛡️ HACKPROOF AI</header>
+
+<div class="container">
+
+    <div id="chat">
+        <div class="message bot">
+            <b>HackProof:</b><br>
+            Hello! I am HackProof AI. Ask me a cybersecurity question.
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input id="question"
+               placeholder="Ask HackProof..."
+               onkeydown="if(event.key==='Enter') sendMessage()">
+
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+async function sendMessage() {
+
+    const input = document.getElementById("question");
+    const question = input.value.trim();
+
+    if (!question) return;
+
+    const chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="message user">
+            <b>You:</b> ${question}
+        </div>
+    `;
+
+    input.value = "";
+
+    try {
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                question: question
+            })
+        });
+
+        const data = await response.json();
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                ${data.answer}
+            </div>
+        `;
+
+    } catch (error) {
+
+        chat.innerHTML += `
+            <div class="message bot">
+                <b>HackProof:</b><br>
+                Error connecting to HackProof server.
+            </div>
+        `;
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
+"""
+
+@app.route("/")
+def home():
+    return HTML
+
+
+@app.route("/chat", methods=["POST"])
+def chat():
+
+    data = request.get_json() or {}
+    question = data.get("question", "").strip()
+
+    if not question:
+        return jsonify({
+            "answer": "Please enter a question."
+        })
+
+    result = handle_analysis_request(question)
+
+    if result is not None:
+        return jsonify({
+            "answer": result.replace("\n", "<br>")
+        })
+
+    return jsonify({
+        "answer": "I don't recognize that analysis command yet."
+    })
+
+
+if __name__ == "__main__":
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )

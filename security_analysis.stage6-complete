@@ -1,0 +1,149 @@
+import ipaddress
+import re
+
+def analyze_ip(value):
+    try:
+        ip = ipaddress.ip_address(value)
+
+        if ip.is_private:
+            category = "Private IP address"
+        elif ip.is_loopback:
+            category = "Loopback IP address"
+        elif ip.is_global:
+            category = "Public IP address"
+        else:
+            category = "Special-purpose IP address"
+
+        return f"IP Analysis: {ip}\nType: {category}"
+
+    except ValueError:
+        return "Invalid IP address."
+
+def analyze_text(value):
+    value = value.strip()
+
+    if re.fullmatch(r"\d{1,3}(?:\.\d{1,3}){3}", value):
+        return analyze_ip(value)
+
+    return "No IP address detected."
+
+def analyze_domain(value):
+    value = value.strip().lower()
+
+    if "." not in value:
+        return "Invalid domain format."
+
+    if " " in value or "/" in value:
+        return "Invalid domain format."
+
+    return (
+        f"Domain Analysis: {value}\n"
+        "Type: Domain name\n"
+        "Next step: DNS resolution can be performed."
+    )
+
+def analyze_url(value):
+    value = value.strip()
+
+    if not (value.startswith("http://") or value.startswith("https://")):
+        return "Invalid URL. URL should start with http:// or https://."
+
+    return (
+        f"URL Analysis: {value}\n"
+        "Type: Web URL\n"
+        "Next step: Check the domain, protocol, and security configuration."
+    )
+
+def analyze_port(value):
+    value = value.strip()
+
+    try:
+        port = int(value)
+    except ValueError:
+        return "Invalid port number."
+
+    if not 1 <= port <= 65535:
+        return "Port must be between 1 and 65535."
+
+    common_ports = {
+        20: "FTP Data",
+        21: "FTP",
+        22: "SSH",
+        23: "Telnet",
+        25: "SMTP",
+        53: "DNS",
+        80: "HTTP",
+        443: "HTTPS"
+    }
+
+    service = common_ports.get(port, "Unknown/common service")
+
+    return (
+        f"Port Analysis: {port}\n"
+        f"Service: {service}\n"
+        "Security note: Verify that this port is required and properly secured."
+    )
+
+def analyze_log(value):
+    value = value.strip()
+
+    suspicious_keywords = [
+        "failed login",
+        "authentication failure",
+        "unauthorized",
+        "permission denied",
+        "malware",
+        "intrusion",
+        "attack",
+        "brute force"
+    ]
+
+    findings = []
+
+    for keyword in suspicious_keywords:
+        if keyword in value.lower():
+            findings.append(keyword)
+
+    if findings:
+        return (
+            "Log Analysis: SUSPICIOUS\n"
+            f"Indicators found: {', '.join(findings)}\n"
+            "Recommendation: Investigate the event and verify whether the activity was authorized."
+        )
+
+    return (
+        "Log Analysis: No obvious suspicious indicator detected.\n"
+        "Recommendation: Continue monitoring."
+    )
+
+def analyze_threat(value):
+    value = value.strip().lower()
+
+    indicators = {
+        "malware": "Possible malicious software indicator.",
+        "trojan": "Possible trojan-related indicator.",
+        "ransomware": "Possible ransomware-related indicator.",
+        "phishing": "Possible phishing-related indicator.",
+        "credential theft": "Possible credential-theft indicator.",
+        "keylogger": "Possible keylogger indicator.",
+        "powershell": "PowerShell activity may require additional review.",
+        "suspicious script": "Possible suspicious-script indicator."
+    }
+
+    findings = []
+
+    for indicator, description in indicators.items():
+        if indicator in value:
+            findings.append(f"{indicator}: {description}")
+
+    if findings:
+        return (
+            "Threat Analysis: SUSPICIOUS\n"
+            + "\n".join(findings)
+            + "\nRecommendation: Investigate the indicator in an authorized environment."
+        )
+
+    return (
+        "Threat Analysis: No obvious threat indicator detected.\n"
+        "Recommendation: Continue monitoring and verify context."
+    )

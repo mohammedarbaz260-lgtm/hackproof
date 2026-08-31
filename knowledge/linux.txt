@@ -1,0 +1,49 @@
+LINUX BASICS
+
+pwd
+Displays the current working directory.
+
+ls
+Lists files and directories.
+
+cd
+Changes the current directory.
+
+mkdir
+Creates a directory.
+
+touch
+Creates an empty file.
+
+cat
+Displays file contents.
+
+cp
+Copies files or directories.
+
+mv
+Moves or renames files.
+
+rm
+Removes files or directories.
+
+chmod
+Changes file permissions.
+
+sudo
+Runs a command with elevated privileges when authorized.
+
+grep
+Searches text for matching patterns.
+
+find
+Searches for files and directories.
+
+ssh
+Provides encrypted remote access to a system, commonly through TCP port 22.
+
+ps
+Displays information about running processes.
+
+ip
+Displays or manages network interface and IP information.

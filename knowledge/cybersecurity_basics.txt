@@ -1,0 +1,59 @@
+CYBERSECURITY BASICS
+
+CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+VULNERABILITY
+A vulnerability is a weakness in a system, application, network, or process that could be exploited.
+
+THREAT
+A threat is a potential event, actor, or condition that could cause harm by exploiting a vulnerability.
+
+RISK
+Risk is the possibility and impact of a threat exploiting a vulnerability.
+
+ETHICAL HACKING
+Ethical hacking is authorized security testing performed to identify and help fix security weaknesses.
+
+SOC
+A Security Operations Center monitors, detects, investigates, and responds to security events.
+
+PHISHING
+Phishing is a social-engineering technique that attempts to trick users into revealing information or performing an unsafe action.
+
+HASHING
+Hashing converts data into a fixed-length value used for purposes such as integrity verification.
+
+LINUX
+Linux is an operating system widely used in servers, cybersecurity, cloud computing, and security testing.
+
+SSH
+SSH provides encrypted remote access to systems, commonly using TCP port 22.
+
+IDS
+An Intrusion Detection System (IDS) monitors network or system activity and alerts security teams when it detects potentially malicious or suspicious behavior.
+
+IPS
+An Intrusion Prevention System (IPS) monitors traffic and can automatically block or prevent detected malicious activity.
+
+IDS VS IPS
+IDS detects and alerts; IPS detects and actively prevents or blocks threats. IDS is generally passive, while IPS is placed inline and can take preventive action.
+
+
+FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
+
+MALWARE
+Malware is malicious software designed to disrupt, damage, spy on, or gain unauthorized access to systems.
+
+BRUTE FORCE
+A brute-force attack repeatedly tries possible credentials until a valid credential is found.
+
+MULTI FACTOR AUTHENTICATION
+MFA requires two or more verification factors to improve account security.
+
+ENCRYPTION
+Encryption transforms readable data into protected ciphertext so unauthorized users cannot easily read it.
+

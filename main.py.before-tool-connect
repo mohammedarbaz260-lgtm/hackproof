@@ -1,0 +1,140 @@
+from google import genai
+from google.genai import types
+import os
+from tools import run_safe_tool
+import re
+
+client = genai.Client()
+
+SYSTEM_PROMPT = """
+You are HackProof, a cybersecurity learning assistant.
+
+Use the retrieved knowledge when relevant.
+Explain cybersecurity clearly to beginners.
+
+Topics include networking, Linux, ethical hacking, SOC,
+web security, vulnerability assessment, and defensive security.
+
+Only provide security guidance for authorized systems,
+labs, and learning environments.
+"""
+
+knowledge = ""
+
+for filename in os.listdir("knowledge"):
+    if filename.endswith(".txt"):
+        filepath = os.path.join("knowledge", filename)
+        with open(filepath, "r", encoding="utf-8") as file:
+            knowledge += f"\n--- {filename} ---\n"
+            knowledge += file.read()
+
+
+def retrieve_knowledge(question):
+    question_words = set(re.findall(r"\b\w+\b", question.lower()))
+    sections = knowledge.split("\n\n")
+    scored_sections = []
+
+    stop_words = {
+        "what", "is", "are", "the", "a", "an", "and", "or",
+        "how", "why", "which", "does", "do", "to", "of", "in"
+    }
+
+    question_words -= stop_words
+
+    for section in sections:
+        section_words = set(section.lower().split())
+        score = len(question_words & section_words)
+
+        if score > 0:
+            scored_sections.append((score, section))
+
+    scored_sections.sort(key=lambda x: (x[0], -len(x[1])), reverse=True)
+
+    if scored_sections:
+        return "\n\n".join(
+            section for score, section in scored_sections[:1]
+        )
+
+    return "No directly relevant information found."
+
+
+def handle_tool_request(question):
+    q = question.lower()
+    if "who am i" in q or "current user" in q:
+        return run_safe_tool("whoami")
+    if "hostname" in q or "computer name" in q:
+        return run_safe_tool("hostname")
+    if "network interfaces" in q or "network interface" in q or "my ip" in q:
+        return run_safe_tool("network interfaces")
+    if "listening ports" in q or "open ports" in q or "list ports" in q:
+        return run_safe_tool("list listening ports")
+    if "list files" in q or "show files" in q:
+        return run_safe_tool("list files")
+    if q.strip() == "pwd" or "current directory" in q:
+        return run_safe_tool("pwd")
+    return None
+
+chat = client.chats.create(
+    model="gemini-3.5-flash",
+    config=types.GenerateContentConfig(
+        system_instruction=SYSTEM_PROMPT
+    )
+)
+
+print("=================================")
+print("        HACKPROOF AI")
+print("=================================")
+print("Knowledge Base: ON")
+print("Multi-file Retrieval: ON")
+print("Memory: ON")
+print("Type 'exit' to quit.\n")
+
+while True:
+    user_input = input("You: ")
+
+    if user_input.lower() == "exit":
+        print("HackProof: Goodbye!")
+        break
+
+    relevant_knowledge = retrieve_knowledge(user_input)
+    with open("memory.txt", "r", encoding="utf-8") as f:
+        memory = f.read()
+
+    prompt = f"""
+RETRIEVED KNOWLEDGE:
+
+{relevant_knowledge}
+CONVERSATION MEMORY:
+{memory}
+
+
+USER QUESTION:
+
+{user_input}
+
+Answer the user using the retrieved knowledge when relevant.
+"""
+
+    try:
+        response = chat.send_message(prompt)
+        answer = response.text
+    except Exception:
+        q = user_input.lower()
+
+        if "name" in q:
+            answer = "Your name is HackProof Student."
+
+        elif relevant_knowledge.strip():
+            answer = "Gemini is temporarily unavailable, so I am answering from the local knowledge base.\n\n" + relevant_knowledge
+
+        elif memory.strip():
+            answer = "Gemini is temporarily unavailable, so I am answering from local conversation memory.\n\n" + memory
+
+        else:
+            answer = "Gemini is temporarily unavailable, and I could not find a matching local memory or knowledge entry."
+    memory_entry = f"\nUser: {user_input}\nHackProof: {answer}\n"
+    with open("memory.txt", "a", encoding="utf-8") as f:
+        f.write(memory_entry)
+
+    print("\nHackProof:", answer)
+    print()
