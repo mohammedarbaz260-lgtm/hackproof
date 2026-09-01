@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from google import genai
 from google.genai import types
 import os
@@ -90,72 +92,76 @@ print("Multi-file Retrieval: ON")
 print("Memory: ON")
 print("Type 'exit' to quit.\n")
 
-while True:
-    user_input = input("You: ")
+def main():
+    while True:
+        user_input = input("You: ")
 
-    tool_result = handle_tool_request(user_input)
+        tool_result = handle_tool_request(user_input)
 
-    if tool_result is not None:
-        answer = "Safe tool result:\n" + tool_result
+        if tool_result is not None:
+            answer = "Safe tool result:\n" + tool_result
+            memory_entry = f"\nUser: {user_input}\nHackProof: {answer}\n"
+
+            with open("memory.txt", "a", encoding="utf-8") as f:
+                f.write(memory_entry)
+
+            print("\nHackProof:", answer)
+            print()
+            continue
+        analysis_result = handle_analysis_request(user_input)
+        if analysis_result is not None:
+            print()
+            print("HackProof:", analysis_result)
+            print()
+            continue
+
+
+        if user_input.lower() == "exit":
+            print("HackProof: Goodbye!")
+            break
+
+        relevant_knowledge = retrieve_knowledge(user_input)
+        with open("memory.txt", "r", encoding="utf-8") as f:
+            memory = f.read()
+
+        prompt = f"""
+    RETRIEVED KNOWLEDGE:
+
+    {relevant_knowledge}
+    CONVERSATION MEMORY:
+    {memory}
+
+
+    USER QUESTION:
+
+    {user_input}
+
+    Answer the user using the retrieved knowledge when relevant.
+    """
+
+        try:
+            response = chat.send_message(prompt)
+            answer = response.text
+        except Exception:
+            q = user_input.lower()
+
+            if "name" in q:
+                answer = "Your name is HackProof Student."
+
+            elif relevant_knowledge.strip():
+                answer = "Gemini is temporarily unavailable, so I am answering from the local knowledge base.\n\n" + relevant_knowledge
+
+            elif memory.strip():
+                answer = "Gemini is temporarily unavailable, so I am answering from local conversation memory.\n\n" + memory
+
+            else:
+                answer = "Gemini is temporarily unavailable, and I could not find a matching local memory or knowledge entry."
         memory_entry = f"\nUser: {user_input}\nHackProof: {answer}\n"
-
         with open("memory.txt", "a", encoding="utf-8") as f:
             f.write(memory_entry)
 
         print("\nHackProof:", answer)
         print()
-        continue
-    analysis_result = handle_analysis_request(user_input)
-    if analysis_result is not None:
-        print()
-        print("HackProof:", analysis_result)
-        print()
-        continue
 
-
-    if user_input.lower() == "exit":
-        print("HackProof: Goodbye!")
-        break
-
-    relevant_knowledge = retrieve_knowledge(user_input)
-    with open("memory.txt", "r", encoding="utf-8") as f:
-        memory = f.read()
-
-    prompt = f"""
-RETRIEVED KNOWLEDGE:
-
-{relevant_knowledge}
-CONVERSATION MEMORY:
-{memory}
-
-
-USER QUESTION:
-
-{user_input}
-
-Answer the user using the retrieved knowledge when relevant.
-"""
-
-    try:
-        response = chat.send_message(prompt)
-        answer = response.text
-    except Exception:
-        q = user_input.lower()
-
-        if "name" in q:
-            answer = "Your name is HackProof Student."
-
-        elif relevant_knowledge.strip():
-            answer = "Gemini is temporarily unavailable, so I am answering from the local knowledge base.\n\n" + relevant_knowledge
-
-        elif memory.strip():
-            answer = "Gemini is temporarily unavailable, so I am answering from local conversation memory.\n\n" + memory
-
-        else:
-            answer = "Gemini is temporarily unavailable, and I could not find a matching local memory or knowledge entry."
-    memory_entry = f"\nUser: {user_input}\nHackProof: {answer}\n"
-    with open("memory.txt", "a", encoding="utf-8") as f:
-        f.write(memory_entry)
-
-    print("\nHackProof:", answer)
-    print()
+if __name__ == "__main__":
+    main()
