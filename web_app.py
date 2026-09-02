@@ -20,6 +20,7 @@ from pathlib import Path
 
 from analysis_router import handle_analysis_request
 from tools import run_safe_tool, SAFE_COMMANDS, TOOL_DESCRIPTIONS
+from phishing_detector import analyze_url, format_result
 
 
 def load_knowledge():
@@ -556,6 +557,7 @@ button {
     <nav class="nav">
         <a href="/dashboard">📊 Dashboard</a>
         <a href="/" class="active">🤖 AI Assistant</a>
+        <a href="/phishing">🛡️ Phishing Scanner</a>
         <a href="/analysis">🔍 Security Analysis</a>
         <a href="/tools">🧰 Safe Tools</a>
     </nav>
@@ -1459,6 +1461,27 @@ def tools_page():
     """
 
 
+@app.route("/api/phishing", methods=["POST"])
+@login_required
+def phishing_api():
+    data = request.get_json(silent=True) or {}
+    url = str(data.get("url", "")).strip()
+
+    if not url:
+        return jsonify({"error": "Please provide a URL."}), 400
+
+    result = analyze_url(url)
+
+    return jsonify({
+        "url": result["url"],
+        "risk": result["risk"],
+        "score": result["score"],
+        "indicators": result["indicators"],
+        "recommendation": result["recommendation"],
+        "report": format_result(result),
+    })
+
+
 @app.route("/")
 @login_required
 def home():
@@ -1832,6 +1855,143 @@ def report_detail(report_id):
     </body>
     </html>
     """
+
+
+@app.route("/phishing", methods=["GET", "POST"])
+@login_required
+def phishing_page():
+    result = None
+
+    if request.method == "POST":
+        url = request.form.get("url", "").strip()
+
+        if url:
+            result = analyze_url(url)
+        else:
+            result = {
+                "url": "",
+                "risk": "UNKNOWN",
+                "score": 0,
+                "indicators": [],
+                "recommendation": "Please enter a URL to analyze."
+            }
+
+    report = format_result(result) if result else None
+
+    return f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI - Phishing Scanner</title>
+    <style>
+        * {{ box-sizing: border-box; }}
+
+        body {{
+            margin: 0;
+            background: #0f172a;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }}
+
+        .page {{
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 30px;
+        }}
+
+        .card {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 30px;
+        }}
+
+        h1 {{
+            margin-top: 0;
+        }}
+
+        .subtitle {{
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }}
+
+        input {{
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0 15px;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+        }}
+
+        button {{
+            padding: 13px 24px;
+            border: 0;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #0ea5e9;
+            color: white;
+        }}
+
+        .result {{
+            margin-top: 25px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }}
+
+        a {{
+            color: #7dd3fc;
+        }}
+
+        .back {{
+            margin-bottom: 20px;
+        }}
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <p class="back">
+        <a href="/dashboard">← Back to Dashboard</a>
+    </p>
+
+    <div class="card">
+
+        <h1>🔎 Phishing URL Scanner</h1>
+
+        <p class="subtitle">
+            Analyze a URL locally for common phishing indicators.
+        </p>
+
+        <form method="POST">
+
+            <input
+                type="url"
+                name="url"
+                placeholder="https://example.com"
+                required
+            >
+
+            <button type="submit">
+                Analyze URL
+            </button>
+
+        </form>
+
+        {f'<div class="result">{report}</div>' if report else ''}
+
+    </div>
+</div>
+</body>
+</html>
+"""
+
 
 if __name__ == "__main__":
     app.run(
