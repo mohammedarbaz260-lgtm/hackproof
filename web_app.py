@@ -21,6 +21,7 @@ from pathlib import Path
 from analysis_router import handle_analysis_request
 from tools import run_safe_tool, SAFE_COMMANDS, TOOL_DESCRIPTIONS
 from phishing_detector import analyze_url, format_result
+from scam_detector import analyze_scam, format_scam_result
 
 
 def load_knowledge():
@@ -557,7 +558,6 @@ button {
     <nav class="nav">
         <a href="/dashboard">📊 Dashboard</a>
         <a href="/" class="active">🤖 AI Assistant</a>
-        <a href="/phishing">🛡️ Phishing Scanner</a>
         <a href="/analysis">🔍 Security Analysis</a>
         <a href="/tools">🧰 Safe Tools</a>
     </nav>
@@ -1062,7 +1062,9 @@ def dashboard():
 
             <a href="/dashboard">🏠 Dashboard</a>
             <a href="/">🤖 AI Chat</a>
-            <a href="/dashboard">🔍 Security Analysis</a>
+            <a href="/analysis">🔎 Security Analysis</a>
+        <a href="/phishing">🛡️ Phishing Scanner</a>
+        <a href="/scam">🛡️ Scam Detector</a>
             <a href="/tools">🛠️ Safe Tools</a>
             <a href="/knowledge">📚 Knowledge Base</a>
             <a href="/reports">📝 Reports</a>
@@ -1857,6 +1859,95 @@ def report_detail(report_id):
     """
 
 
+
+
+@app.route("/scam", methods=["GET", "POST"])
+@login_required
+def scam_page():
+    result = None
+    message = ""
+
+    if request.method == "POST":
+        message = request.form.get("message", "").strip()
+        if message:
+            result = analyze_scam(message)
+
+    return f'''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI - Scam Detector</title>
+    <style>
+        body {{
+            margin: 0;
+            background: #0f172a;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }}
+        .page {{
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+        }}
+        .card {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 30px;
+        }}
+        textarea {{
+            width: 100%;
+            min-height: 180px;
+            padding: 14px;
+            margin: 15px 0;
+            box-sizing: border-box;
+            background: #1e293b;
+            color: white;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            font-size: 15px;
+        }}
+        button {{
+            padding: 12px 22px;
+            background: #0ea5e9;
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }}
+        .result {{
+            margin-top: 25px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }}
+        a {{
+            color: #7dd3fc;
+        }}
+    </style>
+</head>
+<body>
+<div class="page">
+    <p><a href="/dashboard">← Back to Dashboard</a></p>
+
+    <div class="card">
+        <h1>🛡️ Scam Message Detector</h1>
+        <p>Analyze SMS, email, or other messages for common scam indicators.</p>
+
+        <form method="POST">
+            <textarea name="message" placeholder="Paste a suspicious message here..." required>{message}</textarea>
+            <br>
+            <button type="submit">Analyze Message</button>
+        </form>
+
+        {('<div class="result">' + format_scam_result(result) + '</div>') if result else ''}
+    </div>
+</div>
+</body>
+</html>
+'''
 
 @app.route("/phishing", methods=["GET", "POST"])
 @login_required
