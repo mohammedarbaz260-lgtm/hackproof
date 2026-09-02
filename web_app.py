@@ -1857,6 +1857,7 @@ def report_detail(report_id):
     """
 
 
+
 @app.route("/phishing", methods=["GET", "POST"])
 @login_required
 def phishing_page():
@@ -1876,72 +1877,88 @@ def phishing_page():
                 "recommendation": "Please enter a URL to analyze."
             }
 
-    report = format_result(result) if result else None
+    risk = result.get("risk", "UNKNOWN") if result else ""
+    score = result.get("score", 0) if result else 0
+    indicators = result.get("indicators", []) if result else []
+    recommendation = result.get("recommendation", "") if result else ""
+
+    indicator_html = ""
+
+    if indicators:
+        indicator_html = "".join(
+            f'<div class="indicator">⚠️ {indicator}</div>'
+            for indicator in indicators
+        )
+    elif result:
+        indicator_html = '<div class="safe-indicator">✓ No strong phishing indicators detected</div>'
+
+    result_html = ""
+
+    if result:
+        result_html = f"""
+        <section class="results">
+
+            <div class="result-header">
+                <div>
+                    <div class="eyebrow">SECURITY ANALYSIS</div>
+                    <h2>Scan Result</h2>
+                </div>
+
+                <div class="risk risk-{risk.lower()}">
+                    {risk}
+                </div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-number">{score}</div>
+                <div>
+                    <div class="score-title">Risk Score</div>
+                    <div class="score-scale">0 — 100</div>
+                </div>
+            </div>
+
+            <div class="target-card">
+                <div class="label">ANALYZED URL</div>
+                <div class="target">{result.get("url", "")}</div>
+            </div>
+
+            <div class="section">
+                <h3>🔍 Detected Indicators</h3>
+                <div class="indicators">
+                    {indicator_html}
+                </div>
+            </div>
+
+            <div class="recommendation">
+                <div class="label">🛡️ RECOMMENDATION</div>
+                <p>{recommendation}</p>
+            </div>
+
+        </section>
+        """
 
     return f"""
 <!DOCTYPE html>
 <html>
 <head>
     <title>HackProof AI - Phishing Scanner</title>
+
     <style>
-        * {{ box-sizing: border-box; }}
+        * {{
+            box-sizing: border-box;
+        }}
 
         body {{
             margin: 0;
-            background: #0f172a;
+            background: #0b1220;
             color: #e5e7eb;
             font-family: Arial, sans-serif;
         }}
 
         .page {{
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 30px;
-        }}
-
-        .card {{
-            background: #111827;
-            border: 1px solid #334155;
-            border-radius: 14px;
-            padding: 30px;
-        }}
-
-        h1 {{
-            margin-top: 0;
-        }}
-
-        .subtitle {{
-            color: #94a3b8;
-            margin-bottom: 25px;
-        }}
-
-        input {{
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0 15px;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            background: #1e293b;
-            color: white;
-            font-size: 16px;
-        }}
-
-        button {{
-            padding: 13px 24px;
-            border: 0;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            background: #0ea5e9;
-            color: white;
-        }}
-
-        .result {{
-            margin-top: 25px;
-            padding: 20px;
-            background: #1e293b;
-            border-radius: 10px;
-            white-space: pre-wrap;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 45px 28px;
         }}
 
         a {{
@@ -1949,28 +1966,246 @@ def phishing_page():
         }}
 
         .back {{
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+        }}
+
+        .card {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+        }}
+
+        .top {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }}
+
+        h1 {{
+            margin: 0;
+            font-size: 32px;
+        }}
+
+        .subtitle {{
+            color: #94a3b8;
+            margin: 10px 0 30px;
+        }}
+
+        .badge {{
+            border: 1px solid #0ea5e9;
+            color: #7dd3fc;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }}
+
+        form {{
+            display: flex;
+            gap: 12px;
+        }}
+
+        input {{
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #475569;
+            border-radius: 9px;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+        }}
+
+        button {{
+            padding: 15px 24px;
+            border: 0;
+            border-radius: 9px;
+            background: #0ea5e9;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }}
+
+        button:hover {{
+            opacity: .9;
+        }}
+
+        .results {{
+            margin-top: 28px;
+            border-top: 1px solid #334155;
+            padding-top: 28px;
+        }}
+
+        .result-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+
+        .eyebrow,
+        .label {{
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            font-weight: bold;
+        }}
+
+        h2 {{
+            margin: 5px 0 0;
+        }}
+
+        .risk {{
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 13px;
+        }}
+
+        .risk-low {{
+            background: #123524;
+            color: #86efac;
+            border: 1px solid #166534;
+        }}
+
+        .risk-medium {{
+            background: #3b2f0b;
+            color: #fde68a;
+            border: 1px solid #a16207;
+        }}
+
+        .risk-high {{
+            background: #3f1219;
+            color: #fca5a5;
+            border: 1px solid #b91c1c;
+        }}
+
+        .risk-unknown {{
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+        }}
+
+        .score-card {{
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 22px;
+            padding: 22px;
+            background: #172235;
+            border-radius: 12px;
+        }}
+
+        .score-number {{
+            font-size: 48px;
+            font-weight: bold;
+        }}
+
+        .score-title {{
+            font-size: 17px;
+            font-weight: bold;
+        }}
+
+        .score-scale {{
+            color: #94a3b8;
+            margin-top: 5px;
+        }}
+
+        .target-card {{
+            margin-top: 16px;
+            padding: 18px;
+            background: #172235;
+            border-radius: 12px;
+        }}
+
+        .target {{
+            margin-top: 8px;
+            word-break: break-all;
+            color: #dbeafe;
+        }}
+
+        .section {{
+            margin-top: 24px;
+        }}
+
+        h3 {{
+            font-size: 16px;
+        }}
+
+        .indicator {{
+            padding: 12px 14px;
+            margin-top: 8px;
+            background: #251b1e;
+            border: 1px solid #4b2930;
+            border-radius: 8px;
+            color: #fecaca;
+        }}
+
+        .safe-indicator {{
+            padding: 12px 14px;
+            background: #123524;
+            border: 1px solid #166534;
+            border-radius: 8px;
+            color: #bbf7d0;
+        }}
+
+        .recommendation {{
+            margin-top: 24px;
+            padding: 18px;
+            background: #172235;
+            border-left: 4px solid #0ea5e9;
+            border-radius: 8px;
+        }}
+
+        .recommendation p {{
+            margin-bottom: 0;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }}
+
+        @media (max-width: 700px) {{
+            form {{
+                flex-direction: column;
+            }}
+
+            .top {{
+                flex-direction: column;
+            }}
+
+            .result-header {{
+                align-items: flex-start;
+                gap: 15px;
+                flex-direction: column;
+            }}
         }}
     </style>
 </head>
 
 <body>
+
 <div class="page">
 
-    <p class="back">
+    <div class="back">
         <a href="/dashboard">← Back to Dashboard</a>
-    </p>
+    </div>
 
     <div class="card">
 
-        <h1>🔎 Phishing URL Scanner</h1>
+        <div class="top">
+            <div>
+                <h1>🔎 Phishing URL Scanner</h1>
+                <p class="subtitle">
+                    Analyze a URL locally for common phishing indicators.
+                </p>
+            </div>
 
-        <p class="subtitle">
-            Analyze a URL locally for common phishing indicators.
-        </p>
+            <div class="badge">
+                LOCAL ANALYSIS
+            </div>
+        </div>
 
         <form method="POST">
-
             <input
                 type="url"
                 name="url"
@@ -1981,13 +2216,14 @@ def phishing_page():
             <button type="submit">
                 Analyze URL
             </button>
-
         </form>
 
-        {f'<div class="result">{report}</div>' if report else ''}
+        {result_html}
 
     </div>
+
 </div>
+
 </body>
 </html>
 """
