@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv(".env")
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template_string
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("HACKPROOF_SECRET_KEY")
@@ -22,6 +22,7 @@ from analysis_router import handle_analysis_request
 from tools import run_safe_tool, SAFE_COMMANDS, TOOL_DESCRIPTIONS
 from phishing_detector import analyze_url, format_result
 from scam_detector import analyze_scam, format_scam_result
+from unified_threat_analyzer import analyze_input, format_unified_result
 
 
 def load_knowledge():
@@ -1097,7 +1098,13 @@ def dashboard():
 
                 <div class="card">
                     <h2>🛠️ Safe Tools</h2>
-                    <p>Access approved cybersecurity tools.</p>
+                <div class="card">
+            <h2>🛡️ Unified Threat Analyzer</h2>
+            <p>Analyze suspicious URLs and messages with HackProof's local threat detection engines.</p>
+            <p><a href="/unified-threat">🔎 Open Unified Threat Analyzer</a></p>
+        </div>
+
+            <p>Access approved cybersecurity tools.</p>
                     <span class="status">Available</span>
                 </div>
 
@@ -2318,6 +2325,117 @@ def phishing_page():
 </body>
 </html>
 """
+
+
+
+@app.route("/api/unified-threat", methods=["POST"])
+@login_required
+def unified_threat_api():
+    data = request.get_json(silent=True) or {}
+
+    user_input = (
+        data.get("input")
+        or data.get("message")
+        or data.get("url")
+        or ""
+    ).strip()
+
+    input_type = str(data.get("input_type", "auto")).strip().lower()
+
+    if not user_input:
+        return jsonify({
+            "error": "No input provided."
+        }), 400
+
+    result = analyze_input(user_input, input_type)
+
+    return jsonify(result)
+
+
+
+@app.route("/unified-threat", methods=["GET", "POST"])
+@login_required
+def unified_threat_page():
+    result = None
+    user_input = ""
+    input_type = "auto"
+
+    if request.method == "POST":
+        user_input = request.form.get("input", "").strip()
+        input_type = request.form.get("input_type", "auto").strip().lower()
+
+        if user_input:
+            result = analyze_input(user_input, input_type)
+
+    return render_template_string("""
+<!DOCTYPE html>
+<html>
+<head>
+<title>HackProof AI - Unified Threat Analyzer</title>
+<style>
+body { margin:0; background:#07111f; color:#dbe7f5; font-family:Arial,sans-serif; }
+.layout { display:flex; min-height:100vh; }
+.sidebar { width:220px; background:#0a1728; border-right:1px solid #203650; padding:24px 16px; }
+.logo { font-size:20px; font-weight:bold; margin-bottom:30px; }
+.sidebar a { display:block; color:#9fb3c8; text-decoration:none; padding:11px 12px; border-radius:8px; margin-bottom:6px; }
+.sidebar a:hover { background:#102941; color:white; }
+.main { flex:1; padding:40px; max-width:1100px; }
+.subtitle { color:#8fa6bd; }
+.card { background:#0d1d31; border:1px solid #243d59; border-radius:12px; padding:24px; margin-top:25px; }
+textarea { width:100%; min-height:150px; background:#07111f; color:#e5eef8; border:1px solid #34516e; border-radius:8px; padding:14px; }
+select { background:#07111f; color:#e5eef8; border:1px solid #34516e; border-radius:8px; padding:10px; margin:12px 0; }
+button { background:#1464a5; color:white; border:0; border-radius:8px; padding:12px 22px; cursor:pointer; font-weight:bold; }
+pre { white-space:pre-wrap; background:#07111f; border:1px solid #29435f; border-radius:8px; padding:18px; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="logo">🛡️ HackProof AI</div>
+<a href="/dashboard">🏠 Dashboard</a>
+<a href="/">🤖 AI Assistant</a>
+<a href="/analysis">🔍 Security Analysis</a>
+<a href="/unified-threat">🛡️ Unified Threat</a>
+<a href="/phishing">🎣 Phishing Scanner</a>
+<a href="/scam">🚨 Scam Detector</a>
+<a href="/tools">🛠️ Safe Tools</a>
+<a href="/knowledge">📚 Knowledge Base</a>
+<a href="/reports">📑 Reports</a>
+<a href="/logout">🚪 Logout</a>
+</aside>
+
+<main class="main">
+<h1>🛡️ Unified Threat Analyzer</h1>
+<div class="subtitle">Analyze URLs and suspicious messages with HackProof's local detection engines.</div>
+
+<div class="card">
+<form method="POST">
+<label><strong>Input type</strong></label><br>
+<select name="input_type">
+<option value="auto">Auto Detect</option>
+<option value="url">URL</option>
+<option value="message">Message</option>
+</select>
+<br>
+<label><strong>URL or suspicious message</strong></label><br><br>
+<textarea name="input" placeholder="Paste a URL or suspicious message here...">{{ user_input }}</textarea>
+<br><br>
+<button type="submit">🔎 Analyze Threat</button>
+</form>
+</div>
+
+{% if result %}
+<div class="card">
+<h2>Analysis Result</h2>
+<pre>{{ result }}</pre>
+</div>
+{% endif %}
+</main>
+</div>
+</body>
+</html>
+""", result=format_unified_result(result) if result else None,
+       user_input=user_input, input_type=input_type)
 
 
 if __name__ == "__main__":
