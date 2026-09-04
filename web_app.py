@@ -2459,6 +2459,164 @@ pre { white-space:pre-wrap; background:#07111f; border:1px solid #29435f; border
 """, result=format_unified_result(result) if result else None,
        user_input=user_input, input_type=input_type)
 
+@app.route("/security-intelligence", methods=["GET", "POST"])
+@login_required
+def security_intelligence_page():
+    result = None
+    user_input = ""
+
+    if request.method == "POST":
+        user_input = request.form.get("input", "").strip()
+
+        if user_input:
+            result = format_indicator_result(
+                analyze_indicator(user_input)
+            )
+
+    return render_template_string("""
+<!DOCTYPE html>
+<html>
+<head>
+<title>HackProof AI - Security Intelligence</title>
+<style>
+body {
+    margin: 0;
+    background: #07111f;
+    color: #dbe7f5;
+    font-family: Arial, sans-serif;
+}
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    width: 220px;
+    background: #0a1728;
+    border-right: 1px solid #203650;
+    padding: 24px 16px;
+}
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+.sidebar a {
+    display: block;
+    color: #9fb3c8;
+    text-decoration: none;
+    padding: 11px 12px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+.sidebar a:hover {
+    background: #102941;
+    color: white;
+}
+.main {
+    flex: 1;
+    padding: 40px;
+    max-width: 1100px;
+}
+.card {
+    background: #0b1726;
+    border: 1px solid #243d59;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 25px;
+}
+.subtitle {
+    color: #8fa6bd;
+}
+input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    background: #07111f;
+    color: #e5eef8;
+    border: 1px solid #34516e;
+    border-radius: 8px;
+    font-size: 15px;
+}
+button {
+    margin-top: 14px;
+    background: #1464a5;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 22px;
+    cursor: pointer;
+    font-weight: bold;
+}
+pre {
+    white-space: pre-wrap;
+    background: #07111f;
+    border: 1px solid #29435f;
+    border-radius: 8px;
+    padding: 18px;
+    line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+<div class="logo">🛡️ HackProof AI</div>
+
+<a href="/dashboard">🏠 Dashboard</a>
+<a href="/chat">🤖 AI Assistant</a>
+<a href="/analysis">🔍 Security Analysis</a>
+<a href="/unified-threat">🛡️ Unified Threat</a>
+<a href="/security-intelligence">🧠 Security Intelligence</a>
+<a href="/phishing">🎣 Phishing Scanner</a>
+<a href="/scam">🚨 Scam Detector</a>
+<a href="/tools">🛠️ Safe Tools</a>
+<a href="/knowledge">📚 Knowledge Base</a>
+<a href="/reports">📄 Reports</a>
+<a href="/logout">🚪 Logout</a>
+</aside>
+
+<main class="main">
+
+<h1>🧠 Security Intelligence</h1>
+
+<div class="subtitle">
+Analyze IP addresses, domains, URLs, and hash formats using HackProof's local intelligence engine.
+</div>
+
+<div class="card">
+<form method="POST">
+
+<label><strong>Indicator</strong></label><br><br>
+
+<input
+    type="text"
+    name="input"
+    placeholder="Enter IP, domain, URL, or hash..."
+    value="{{ user_input }}"
+    required
+>
+
+<br>
+
+<button type="submit">🔎 Analyze Indicator</button>
+
+</form>
+</div>
+
+{% if result %}
+<div class="card">
+<h2>Analysis Result</h2>
+<pre>{{ result }}</pre>
+</div>
+{% endif %}
+
+</main>
+</div>
+</body>
+</html>
+""", result=result, user_input=user_input)
 
 if __name__ == "__main__":
     app.run(
