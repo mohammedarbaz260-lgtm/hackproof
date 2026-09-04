@@ -38,3 +38,21 @@ A network switch connects devices within a local network and forwards Ethernet f
 
 FIREWALL
 A firewall controls network traffic according to security rules.
+
+DNS Enumeration
+
+DNS enumeration is the process of collecting information about a domain's DNS configuration and related records. It can help authorized security teams understand a domain's infrastructure and identify potential security weaknesses.
+
+Common DNS records include:
+- A: maps a hostname to an IPv4 address.
+- AAAA: maps a hostname to an IPv6 address.
+- MX: identifies mail servers for a domain.
+- NS: identifies authoritative DNS name servers.
+- TXT: stores text information such as SPF and verification records.
+- CNAME: creates an alias from one hostname to another.
+
+Defensive use:
+DNS enumeration should only be performed against systems you own or are authorized to assess. Security teams can use DNS information to identify unexpected hosts, exposed services, misconfigured records, and possible attack-surface changes.
+
+Example:
+A security analyst investigating example.com may review its authorized DNS records to understand which hosts and services are publicly exposed.
