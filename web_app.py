@@ -23,6 +23,7 @@ from tools import run_safe_tool, SAFE_COMMANDS, TOOL_DESCRIPTIONS
 from phishing_detector import analyze_url, format_result
 from scam_detector import analyze_scam, format_scam_result
 from unified_threat_analyzer import analyze_input, format_unified_result
+from security_intelligence import analyze_indicator, format_indicator_result
 
 
 def load_knowledge():
@@ -2351,6 +2352,27 @@ def unified_threat_api():
 
     return jsonify(result)
 
+
+
+@app.route("/api/security-intelligence", methods=["POST"])
+@login_required
+def security_intelligence_api():
+    data = request.get_json(silent=True) or {}
+
+    user_input = (
+        data.get("input")
+        or data.get("indicator")
+        or ""
+    ).strip()
+
+    if not user_input:
+        return jsonify({
+            "error": "No indicator provided."
+        }), 400
+
+    result = analyze_indicator(user_input)
+
+    return jsonify(result)
 
 
 @app.route("/unified-threat", methods=["GET", "POST"])
