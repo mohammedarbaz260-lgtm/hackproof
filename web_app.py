@@ -23,6 +23,7 @@ from tools import run_safe_tool, SAFE_COMMANDS, TOOL_DESCRIPTIONS
 from phishing_detector import analyze_url, format_result
 from scam_detector import analyze_scam, format_scam_result
 from unified_threat_analyzer import analyze_input, format_unified_result
+from threat_correlation import correlate_threat
 from security_intelligence import analyze_indicator, format_indicator_result
 
 
@@ -2375,6 +2376,189 @@ def security_intelligence_api():
     return jsonify(result)
 
 
+@app.route("/api/threat-correlation", methods=["POST"])
+@login_required
+def threat_correlation_api():
+    data = request.get_json(silent=True) or {}
+    user_input = (
+        data.get("input")
+        or data.get("message")
+        or data.get("url")
+        or ""
+    ).strip()
+
+    if not user_input:
+        return jsonify({"error": "No input provided."}), 400
+
+    result = correlate_threat(user_input)
+    return jsonify(result)
+
+
+@app.route("/threat-correlation", methods=["GET", "POST"])
+@login_required
+def threat_correlation_page():
+    result = None
+    user_input = ""
+
+    if request.method == "POST":
+        user_input = request.form.get("input", "").strip()
+        if user_input:
+            result = correlate_threat(user_input)
+
+    return render_template_string("""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI - Threat Correlation</title>
+    <style>
+        body {
+            margin: 0;
+            background: #07111f;
+            color: #dbe7f5;
+            font-family: Arial, sans-serif;
+        }
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 220px;
+            background: #0a1728;
+            border-right: 1px solid #243a59;
+            padding: 24px 16px;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .sidebar a {
+            display: block;
+            color: #9fb3c8;
+            text-decoration: none;
+            padding: 11px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+        .sidebar a:hover {
+            background: #102941;
+            color: white;
+        }
+        .main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1100px;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 32px;
+        }
+        .subtitle {
+            color: #8fa6bf;
+            margin-bottom: 25px;
+        }
+        .card {
+            background: #0b1727;
+            border: 1px solid #29415f;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            box-sizing: border-box;
+            padding: 14px;
+            background: #07111f;
+            color: #e5eef8;
+            border: 1px solid #34516e;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        button {
+            margin-top: 14px;
+            background: #1464a5;
+            color: white;
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 22px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #1976c5;
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #07111f;
+            border: 1px solid #29415f;
+            border-radius: 8px;
+            padding: 18px;
+            line-height: 1.5;
+        }
+        .risk {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">🛡️ HackProof AI</div>
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/chat">🤖 AI Assistant</a>
+        <a href="/analysis">🔍 Security Analysis</a>
+        <a href="/unified-threat">🛡️ Unified Threat</a>
+        <a href="/security-intelligence">🧠 Security Intelligence</a>
+        <a href="/threat-correlation">🔗 Threat Correlation</a>
+        <a href="/phishing">🎣 Phishing Scanner</a>
+        <a href="/scam">🚨 Scam Detector</a>
+        <a href="/tools">🛠️ Safe Tools</a>
+        <a href="/knowledge">📚 Knowledge Base</a>
+        <a href="/reports">📄 Reports</a>
+        <a href="/logout">🚪 Logout</a>
+    </aside>
+
+    <main class="main">
+        <h1>🔗 Threat Correlation</h1>
+        <div class="subtitle">
+            Combine HackProof's security engines into one correlated threat assessment.
+        </div>
+
+        <div class="card">
+            <form method="POST">
+                <label><strong>URL, IP, domain, or suspicious message</strong></label><br><br>
+                <textarea name="input"
+                    placeholder="Paste a URL, IP address, domain, or suspicious message..."
+                    required>{{ user_input }}</textarea>
+                <br>
+                <button type="submit">🔎 Correlate Threat</button>
+            </form>
+        </div>
+
+        {% if result %}
+        <div class="card">
+            <h2>Correlation Result</h2>
+            <div class="risk">
+                Risk: {{ result.get("risk", "UNKNOWN") }}
+            </div>
+            <div>
+                Threat Score: {{ result.get("score", 0) }}/100
+            </div>
+            <br>
+            <pre>{{ result }}</pre>
+        </div>
+        {% endif %}
+    </main>
+</div>
+</body>
+</html>
+""", result=result, user_input=user_input)
+
+
 @app.route("/unified-threat", methods=["GET", "POST"])
 @login_required
 def unified_threat_page():
@@ -2548,6 +2732,7 @@ button {
     font-weight: bold;
 }
 pre {
+<a href="/threat-correlation">🧠 Threat Correlation</a>
     white-space: pre-wrap;
     background: #07111f;
     border: 1px solid #29435f;
