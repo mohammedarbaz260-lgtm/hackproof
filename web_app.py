@@ -5,6 +5,9 @@ from flask import Flask, request, jsonify, render_template_string
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("HACKPROOF_SECRET_KEY")
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("HACKPROOF_COOKIE_SECURE", "0") == "1"
 from auth import db, User, Report, login_manager
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hackproof.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
