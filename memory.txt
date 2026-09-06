@@ -2139,3 +2139,9 @@ HackProof: CIA TRIAD
 Confidentiality means preventing unauthorized access to information.
 Integrity means protecting information from unauthorized modification.
 Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is the CIA triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
