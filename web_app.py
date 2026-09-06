@@ -1372,16 +1372,6 @@ def analysis():
                             "answer": "HackProof AI has reached the Gemini free-tier limit. Please try again later."
                         })
 
-        local_answer = retrieve_knowledge(question)
-        if local_answer and local_answer != "No directly relevant information found.":
-            return jsonify({
-                "answer": markdown.markdown(local_answer, extensions=["tables", "fenced_code"])
-            })
-
-        return jsonify({
-            "answer": "Gemini is temporarily unavailable. Please try again shortly."
-        })
-
     return f"""
 <!DOCTYPE html>
 <html>
