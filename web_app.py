@@ -536,6 +536,105 @@ button {
         height: 44px;
     }
 }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 850px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        .risk-summary {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }
+
+        .risk-summary h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 21px;
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .risk-box {
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .risk-number {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .risk-box.critical {
+            border-color: #ef4444;
+        }
+
+        .risk-box.high {
+            border-color: #f97316;
+        }
+
+        .risk-box.medium {
+            border-color: #eab308;
+        }
+
+        .risk-box.low {
+            border-color: #22c55e;
+        }
+
+        @media (max-width: 850px) {
+            .risk-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
 </style>
 </head>
 
@@ -928,6 +1027,24 @@ def logout():
 @app.route("/dashboard")
 @login_required
 def dashboard():
+    user_reports = Report.query.filter_by(user_id=current_user.id).all()
+    total_reports = len(user_reports)
+    active_engines = 5
+    account_status = "SECURE"
+
+    risk_counts = {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "MEDIUM": 0,
+        "LOW": 0,
+    }
+
+    for report in user_reports:
+        result_text = str(report.result).upper()
+        for risk in risk_counts:
+            if risk in result_text:
+                risk_counts[risk] += 1
+                break
     reports = Report.query.filter_by(user_id=current_user.id).order_by(Report.created_at.desc()).all()
     report_html = "".join(f'<div class="report-item"><strong>{r.analysis_type}</strong> — {r.target}<br><small>{r.created_at}</small><br><pre>{r.result}</pre><p><a href="/reports/{r.id}">🔎 View Details</a></p></div>' for r in reports)
     return f"""
@@ -1055,7 +1172,44 @@ def dashboard():
                     grid-template-columns: 1fr;
                 }}
             }}
-        </style>
+
+        .metrics {{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }}
+
+        .metric-card {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }}
+
+        .metric-value {{
+            font-size: 30px;
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }}
+
+        .metric-label {{
+            font-size: 14px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }}
+
+        @media (max-width: 850px) {{
+            .metrics {{
+                grid-template-columns: 1fr;
+            }}
+        }}
+
+</style>
     </head>
 
     <body>
@@ -1084,7 +1238,46 @@ def dashboard():
                 <p>Welcome back, {current_user.username}.</p>
             </div>
 
-            <div class="grid">
+            <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-value">{total_reports}</div>
+                <div class="metric-label">Security Reports</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-value">{active_engines}</div>
+                <div class="metric-label">Active Security Engines</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-value">{account_status}</div>
+                <div class="metric-label">Account Status</div>
+            </div>
+        </div>
+
+        <div class="risk-summary">
+            <h2>Security Risk Summary</h2>
+            <div class="risk-grid">
+                <div class="risk-box critical">
+                    <div class="risk-number">{risk_counts["CRITICAL"]}</div>
+                    <div>Critical</div>
+                </div>
+                <div class="risk-box high">
+                    <div class="risk-number">{risk_counts["HIGH"]}</div>
+                    <div>High</div>
+                </div>
+                <div class="risk-box medium">
+                    <div class="risk-number">{risk_counts["MEDIUM"]}</div>
+                    <div>Medium</div>
+                </div>
+                <div class="risk-box low">
+                    <div class="risk-number">{risk_counts["LOW"]}</div>
+                    <div>Low</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
 
                 <div class="card">
                     <h2>🤖 AI Assistant</h2>
