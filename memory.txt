@@ -2157,3 +2157,7 @@ HackProof: CIA TRIAD
 Confidentiality means preventing unauthorized access to information.
 Integrity means protecting information from unauthorized modification.
 Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is the difference between TCP and UDP?
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
