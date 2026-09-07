@@ -638,6 +638,50 @@ button {
             }
         }
 
+
+@media (max-width: 850px) {{
+    .main {{
+        margin-left: 190px !important;
+        padding: 25px !important;
+        max-width: none !important;
+    }}
+
+    .metrics {{
+        grid-template-columns: 1fr !important;
+    }}
+
+    .grid {{
+        grid-template-columns: 1fr !important;
+    }}
+
+    .risk-grid {{
+        grid-template-columns: 1fr !important;
+    }}
+}}
+
+@media (max-width: 600px) {{
+    main {{
+        margin-left: 0 !important;
+        padding: 18px !important;
+    }}
+
+    .sidebar {{
+        display: none !important;
+    }}
+
+    .metrics {{
+        grid-template-columns: 1fr !important;
+    }}
+
+    .grid {{
+        grid-template-columns: 1fr !important;
+    }}
+
+    .risk-grid {{
+        grid-template-columns: 1fr !important;
+    }}
+}}
+
 </style>
 </head>
 
