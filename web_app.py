@@ -1649,57 +1649,128 @@ def analysis():
 @login_required
 def tools_page():
     tool_list = "".join(
-        f"<li><strong>{name}</strong> — {description}</li>"
+        f"""
+        <li style="margin:15px 0;">
+            <strong>{name}</strong> - {description}
+            <form method="POST" action="/tools/run" style="display:inline; margin-left:10px;">
+                <input type="hidden" name="tool_name" value="{name}">
+                <button type="submit">RUN</button>
+            </form>
+        </li>
+        """
         for name, description in TOOL_DESCRIPTIONS.items()
     )
 
     return f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>HackProof AI - Safe Tools</title>
-        <style>
-            * {{ box-sizing: border-box; }}
-            body {{
-                margin: 0;
-                background: #0f172a;
-                color: #e5e7eb;
-                font-family: Arial, sans-serif;
-            }}
-            .page {{
-                max-width: 900px;
-                margin: 50px auto;
-                padding: 30px;
-            }}
-            .card {{
-                background: #111827;
-                border: 1px solid #334155;
-                border-radius: 12px;
-                padding: 25px;
-            }}
-            li {{
-                margin: 15px 0;
-            }}
-            a {{
-                color: #93c5fd;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="page">
-            <p><a href="/dashboard">← Back to Dashboard</a></p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI - Safe Tools</title>
+    <style>
+        * {{ box-sizing: border-box; }}
+        body {{
+            margin: 0;
+            background: #0f172a;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }}
+        .page {{
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+        }}
+        .card {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+        }}
+        li {{
+            margin: 15px 0;
+        }}
+        button {{
+            background: #0ea5e9;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }}
+        a {{
+            color: #93c5fd;
+        }}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <p><a href="/dashboard">← Back to Dashboard</a></p>
 
-            <div class="card">
-                <h1>🛠️ Safe Tools</h1>
-                <p>Approved read-only cybersecurity tools:</p>
-                <ul>
-                    {tool_list}
-                </ul>
-            </div>
+        <div class="card">
+            <h1>🛠️ Safe Tools</h1>
+            <p>Approved read-only cybersecurity tools:</p>
+            <ul>
+                {tool_list}
+            </ul>
         </div>
-    </body>
-    </html>
-    """
+    </div>
+</body>
+</html>
+"""
+
+
+@app.route("/tools/run", methods=["POST"])
+@login_required
+def run_tool_page():
+    tool_name = request.form.get("tool_name", "").strip()
+
+    if tool_name not in SAFE_COMMANDS:
+        result = "Tool not allowed."
+    else:
+        result = run_safe_tool(tool_name)
+
+    return f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HackProof AI - Tool Result</title>
+    <style>
+        body {{
+            margin: 0;
+            padding: 30px;
+            background: #0f172a;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }}
+        .card {{
+            max-width: 900px;
+            margin: auto;
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+        }}
+        pre {{
+            background: #020617;
+            padding: 20px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }}
+        a {{
+            color: #93c5fd;
+        }}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🛠️ Safe Tool Result</h1>
+        <p><strong>Tool:</strong> {tool_name}</p>
+        <pre>{result}</pre>
+        <p><a href="/tools">← Back to Safe Tools</a></p>
+    </div>
+</body>
+</html>
+"""
 
 
 @app.route("/api/phishing", methods=["POST"])
@@ -3035,7 +3106,7 @@ Analyze IP addresses, domains, URLs, and hash formats using HackProof's local in
 
 if __name__ == "__main__":
     app.run(
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=5000,
         debug=os.getenv("HACKPROOF_DEBUG", "0") == "1"
     )
