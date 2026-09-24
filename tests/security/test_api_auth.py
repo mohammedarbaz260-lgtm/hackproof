@@ -28,3 +28,14 @@ def test_login_page_is_reachable():
     response = client.get("/login")
 
     assert response.status_code == 200
+
+
+def test_user_password_hashing():
+    from auth import User
+
+    user = User(username="coverage_user")
+    user.set_password("TestPassword123!")
+
+    assert user.password_hash
+    assert user.check_password("TestPassword123!")
+    assert not user.check_password("WrongPassword!")
