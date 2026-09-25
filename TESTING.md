@@ -52,3 +52,14 @@ Do not advance a change when tests fail, authentication can be bypassed, syntax 
 - Authentication/security tests passing
 - Git working tree previously verified clean
 - Repository synchronized with the remote branch
+
+## Development Test Dependencies
+
+Install the QA/test dependencies before running the automated test suite:
+
+    ./venv/bin/python -m pip install -r requirements-dev.txt
+
+Current verified baseline:
+- 60 automated tests passed
+- 59% overall coverage
+- 1 google-genai deprecation warning
