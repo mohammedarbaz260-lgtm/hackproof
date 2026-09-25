@@ -986,6 +986,9 @@ def register():
         login_user(user)
         return "Registration successful. You can now use HackProof."
 
+    return "Registration page - use POST to create an account"
+
+
 
 
 @app.route("/login", methods=["GET", "POST"])

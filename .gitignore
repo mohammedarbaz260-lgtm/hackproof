@@ -12,3 +12,5 @@ web_app.py.save.*
 
 instance/
 .coverage
+
+cookies.txt
