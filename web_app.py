@@ -1259,6 +1259,69 @@ def dashboard():
             }}
         }}
 
+
+
+        .risk-summary {{
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+        }}
+
+        .risk-summary h2 {{
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 21px;
+        }}
+
+        .risk-grid {{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }}
+
+        .risk-box {{
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            font-weight: bold;
+        }}
+
+        .risk-number {{
+            font-size: 28px;
+            margin-bottom: 6px;
+        }}
+
+        .risk-box.critical {{
+            border-color: #ef4444;
+        }}
+
+        .risk-box.high {{
+            border-color: #f97316;
+        }}
+
+        .risk-box.medium {{
+            border-color: #eab308;
+        }}
+
+        .risk-box.low {{
+            border-color: #22c55e;
+        }}
+
+        @media (max-width: 850px) {{
+            .risk-grid {{
+                grid-template-columns: repeat(2, 1fr);
+            }}
+        }}
+
+        @media (max-width: 500px) {{
+            .risk-grid {{
+                grid-template-columns: 1fr;
+            }}
+        }}
+
 </style>
     </head>
 
@@ -1915,7 +1978,7 @@ def chat():
         })
 
 
-    
+
 @app.route("/knowledge", methods=["GET"])
 @login_required
 def knowledge_page():
