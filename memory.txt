@@ -2181,3 +2181,26 @@ Availability means ensuring authorized users can access systems and data when ne
 User: What is the difference between TCP and UDP?
 HackProof: TCP
 TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+User: What is the CIA triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is the difference between TCP and UDP?
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+User: Explain what a firewall does in cybersecurity.
+HackProof: CYBERSECURITY BASICS
+
+User: What is the CIA triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is a firewall?
+HackProof: FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
