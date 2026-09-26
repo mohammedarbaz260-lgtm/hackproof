@@ -4,6 +4,14 @@ import os
 from flask import Flask, request, jsonify, render_template_string
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 app = Flask(__name__)
+
+@app.after_request
+def add_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
 app.config["SECRET_KEY"] = os.environ.get("HACKPROOF_SECRET_KEY")
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
