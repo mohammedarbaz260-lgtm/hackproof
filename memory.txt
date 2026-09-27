@@ -1,9 +1,9 @@
 HackProof memory test: CIA Triad = Confidentiality, Integrity, Availability.
 
 User: My name is HackProof Student.
-HackProof: Hello, **HackProof Student**! Welcome! I am **HackProof**, your cybersecurity learning assistant. 
+HackProof: Hello, **HackProof Student**! Welcome! I am **HackProof**, your cybersecurity learning assistant.
 
-I'm here to help you navigate the exciting world of cybersecurity—from networking and Linux to ethical hacking, defensive security, and SOC operations. 
+I'm here to help you navigate the exciting world of cybersecurity—from networking and Linux to ethical hacking, defensive security, and SOC operations.
 
 Whether you want to:
 *   Explore fundamental security concepts like the **CIA Triad** (Confidentiality, Integrity, and Availability),
@@ -11,7 +11,7 @@ Whether you want to:
 *   Learn about networking protocols like **UDP** (the fast, connectionless transport protocol), or
 *   Practice defensive security and vulnerability assessment,
 
-I am ready to help you learn in a safe, authorized environment. 
+I am ready to help you learn in a safe, authorized environment.
 
 What cybersecurity topic or concept would you like to dive into first?
 
@@ -21,7 +21,7 @@ HackProof: Your name is **HackProof Student**! 🎓
 Ready to dive into some cybersecurity topics today? We can talk about networking (like UDP), security fundamentals (like Threats and Vulnerabilities), or anything else you'd like to learn!
 
 User: What is my name?
-HackProof: Your name is **HackProof Student**! 🎓 
+HackProof: Your name is **HackProof Student**! 🎓
 
 What cybersecurity concept are we exploring next? We can dive into networking, defensive security, or look closer at things like vulnerabilities and threats!
 
@@ -29,9 +29,9 @@ User: What is DNS?
 HackProof: Great question, **HackProof Student**! Let's break down DNS and see how it connects to some of the concepts we've already discussed.
 
 ### What is DNS?
-**DNS** stands for **Domain Name System**. You can think of it as the **phonebook of the internet**. 
+**DNS** stands for **Domain Name System**. You can think of it as the **phonebook of the internet**.
 
-When you want to visit a website, you type a human-friendly domain name into your browser, like `google.com`. However, computers don't understand names—they communicate using numbers called **IP addresses** (like `142.250.190.46`). 
+When you want to visit a website, you type a human-friendly domain name into your browser, like `google.com`. However, computers don't understand names—they communicate using numbers called **IP addresses** (like `142.250.190.46`).
 
 DNS is the service that translates `google.com` into the correct IP address so your computer knows exactly where to send your request.
 
@@ -42,8 +42,8 @@ DNS is the service that translates `google.com` into the correct IP address so y
 We can connect DNS directly to the concepts of **UDP**, **Vulnerabilities**, and **Threats**:
 
 #### 1. DNS and UDP (The Speed Connection)
-As a networking protocol, DNS primarily uses **UDP (User Datagram Protocol)** on **Port 53** for its queries. 
-* Because UDP is **connectionless and has very low overhead**, it is incredibly fast. 
+As a networking protocol, DNS primarily uses **UDP (User Datagram Protocol)** on **Port 53** for its queries.
+* Because UDP is **connectionless and has very low overhead**, it is incredibly fast.
 * When you click a link, you want the website to load instantly. DNS uses UDP to send a quick, single-packet query and get a quick reply, without wasting time establishing a formal connection (which TCP would require).
 
 #### 2. DNS Threats and Vulnerabilities
@@ -113,7 +113,7 @@ HackProof: Great question! Let's break down **DNS**.
 **DNS** stands for **Domain Name System**. You can think of it as the **phonebook of the internet**.
 
 ### What does DNS do?
-Computers communicate using numbers called **IP addresses** (like `192.0.2.1`), but humans find it much easier to remember names (like `example.com`). DNS translates human-friendly domain names into the numerical IP addresses that computers need to load website content. 
+Computers communicate using numbers called **IP addresses** (like `192.0.2.1`), but humans find it much easier to remember names (like `example.com`). DNS translates human-friendly domain names into the numerical IP addresses that computers need to load website content.
 
 For example, when you type `example.com` into your browser, DNS looks up that name and translates it into its corresponding IP address so your computer knows exactly where to send your request.
 
@@ -167,7 +167,7 @@ HackProof: Gemini is temporarily unavailable, so I am answering from the local k
 ssh
 Provides encrypted remote access to a system, commonly through TCP port 22.
 
-User: 
+User:
 HackProof: Gemini is temporarily unavailable, so I am answering from the local knowledge base.
 
 
@@ -176,7 +176,7 @@ HackProof: Gemini is temporarily unavailable, so I am answering from the local k
 ssh
 Provides encrypted remote access to a system, commonly through TCP port 22.
 
-User: 
+User:
 HackProof: Gemini is temporarily unavailable, so I am answering from the local knowledge base.
 
 
@@ -190,7 +190,7 @@ HackProof: It looks like you are asking about **SSH** and how to close a session
 * **Contrast:** It replaced older, insecure protocols like Telnet (port 23), which transmitted data in plaintext.
 
 ### What does "exit" do?
-In a terminal environment (such as an active SSH session), typing the command **`exit`** (or pressing `Ctrl + D`) is the standard way to safely close the shell session. 
+In a terminal environment (such as an active SSH session), typing the command **`exit`** (or pressing `Ctrl + D`) is the standard way to safely close the shell session.
 * Once you type `exit`, the remote connection is terminated, and you are returned to your local machine's command line.
 
 Are you looking to practice some basic Linux command-line operations, or is there another networking protocol you'd like to dive into?
@@ -226,12 +226,12 @@ User: What is DNS?What is SSH?What is my name?
 HackProof: Hello again, **HackProof Student**! I would be happy to answer all three of your questions. Let's break them down one by one:
 
 ### 1. What is my name?
-Your name is **HackProof Student**! 🎓 
+Your name is **HackProof Student**! 🎓
 
 ---
 
 ### 2. What is DNS?
-**DNS** stands for **Domain Name System**. You can think of it as the **phonebook of the internet**. 
+**DNS** stands for **Domain Name System**. You can think of it as the **phonebook of the internet**.
 
 * **What it does:** Computers communicate using numbers called IP addresses (like `192.0.2.1`), but humans prefer names (like `example.com`). DNS translates those human-friendly domain names into the numerical IP addresses that computers need to load websites.
 * **The Port & Protocol:** DNS typically runs on **Port 53** and primarily uses **UDP** (User Datagram Protocol) because it is incredibly fast and efficient for quick lookups.
@@ -239,7 +239,7 @@ Your name is **HackProof Student**! 🎓
 ---
 
 ### 3. What is SSH?
-**SSH** stands for **Secure Shell**. 
+**SSH** stands for **Secure Shell**.
 
 * **What it does:** It is a protocol used to securely connect to and manage a remote computer or server over a network. Unlike older protocols like Telnet (which sent passwords and commands in clear, readable text), SSH **encrypts all traffic** between your computer and the remote server. This ensures that attackers cannot eavesdrop on your session or steal your credentials.
 * **The Port & Protocol:** SSH operates on **Port 22** using **TCP** (Transmission Control Protocol) to ensure a reliable, stable connection.
@@ -271,13 +271,13 @@ HackProof: Safe tool result:
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host noprefixroute 
+    inet6 ::1/128 scope host noprefixroute
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 00:0c:29:61:55:90 brd ff:ff:ff:ff:ff:ff
     inet 192.168.204.128/24 brd 192.168.204.255 scope global dynamic noprefixroute eth0
        valid_lft 1355sec preferred_lft 1355sec
-    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute 
+    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 
 User: Show files
@@ -326,13 +326,13 @@ HackProof: Safe tool result:
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host noprefixroute 
+    inet6 ::1/128 scope host noprefixroute
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 00:0c:29:61:55:90 brd ff:ff:ff:ff:ff:ff
     inet 192.168.204.128/24 brd 192.168.204.255 scope global dynamic noprefixroute eth0
        valid_lft 1171sec preferred_lft 1171sec
-    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute 
+    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 
 User: List listening ports
@@ -346,13 +346,13 @@ HackProof: Safe tool result:
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host noprefixroute 
+    inet6 ::1/128 scope host noprefixroute
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 00:0c:29:61:55:90 brd ff:ff:ff:ff:ff:ff
     inet 192.168.204.128/24 brd 192.168.204.255 scope global dynamic noprefixroute eth0
        valid_lft 1121sec preferred_lft 1121sec
-    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute 
+    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 
 User: My project is called HackProof AI.
@@ -369,7 +369,7 @@ HackProof: Hello! Here is the breakdown for each of your questions and requests:
 ---
 
 ### 1. What is Cybersecurity?
-**Cybersecurity** is the practice of protecting systems, networks, programs, and data from digital attacks, unauthorized access, theft, or damage. 
+**Cybersecurity** is the practice of protecting systems, networks, programs, and data from digital attacks, unauthorized access, theft, or damage.
 
 Key foundational concepts include:
 * **The CIA Triad:**
@@ -626,9 +626,9 @@ kali
 The current system hostname is **`kali`**.
 
 User: What is the CIA triad in cybersecurity?
-HackProof: Great question, **HackProof Student**! 
+HackProof: Great question, **HackProof Student**!
 
-The **CIA Triad** is the absolute foundation of cybersecurity. It is a fundamental model designed to guide security policies and procedures within any organization to protect information and systems. 
+The **CIA Triad** is the absolute foundation of cybersecurity. It is a fundamental model designed to guide security policies and procedures within any organization to protect information and systems.
 
 Here is what each letter in **CIA** stands for, based on our core security principles:
 
@@ -636,7 +636,7 @@ Here is what each letter in **CIA** stands for, based on our core security princ
 
 ### 1. Confidentiality (C)
 * **What it means:** Preventing unauthorized access to information. It ensures that sensitive data is only accessible to those who are explicitly authorized to see it.
-* **How we enforce it:** 
+* **How we enforce it:**
   * **Encryption:** Scrambling data so only those with the key can read it.
   * **Access Controls:** Using passwords, multi-factor authentication (MFA), and permissions to restrict access.
 
@@ -666,7 +666,7 @@ Let's dive into what DNS enumeration is, why it's so powerful, and how it's done
 ---
 
 ### What is DNS Enumeration?
-DNS enumeration is the process of locating and listing all the DNS servers and their corresponding records for an organization. 
+DNS enumeration is the process of locating and listing all the DNS servers and their corresponding records for an organization.
 
 By analyzing these records, an ethical hacker or security analyst can map out the target's public-facing infrastructure, including web servers, mail servers, and administrative portals.
 
@@ -681,7 +681,7 @@ During enumeration, you look for specific records that reveal details about the 
 ---
 
 ### The Ultimate Goal: DNS Zone Transfers (AXFR)
-The "holy grail" of DNS enumeration is finding a misconfigured DNS server that allows an unauthorized **DNS Zone Transfer (AXFR)**. 
+The "holy grail" of DNS enumeration is finding a misconfigured DNS server that allows an unauthorized **DNS Zone Transfer (AXFR)**.
 
 *   **What it is:** A zone transfer is a legitimate function used to replicate DNS databases between primary and secondary DNS servers.
 *   **The Vulnerability:** If the primary DNS server is misconfigured to allow *anyone* to request a zone transfer, an analyst can copy the entire DNS zone database.
@@ -693,11 +693,11 @@ The "holy grail" of DNS enumeration is finding a misconfigured DNS server that a
 In a defensive security lab, you will often use these command-line tools:
 
 1.  **`dig` (Domain Information Groper):** A powerful command-line tool for querying DNS name servers.
-    *   *Example to query MX records:* 
+    *   *Example to query MX records:*
         ```bash
         dig target.com MX
         ```
-    *   *Example to attempt a Zone Transfer:* 
+    *   *Example to attempt a Zone Transfer:*
         ```bash
         dig axfr @nameserver.target.com target.com
         ```
@@ -713,8 +713,8 @@ To protect your own infrastructure from aggressive DNS enumeration:
 
 Would you like to practice running a basic, safe DNS query using `dig` or talk about how subdomains are brute-forced during a pentest?
 
-User: 
-HackProof: It looks like your message didn't quite go through, **HackProof Student**! No worries at all. 
+User:
+HackProof: It looks like your message didn't quite go through, **HackProof Student**! No worries at all.
 
 We were just discussing **DNS enumeration**. Would you like to:
 
@@ -738,7 +738,7 @@ HackProof: Hello, **HackProof Student**! Since this is your favorite cybersecuri
 
 ### What is DNS Enumeration?
 
-**DNS Enumeration** is the systematic process of querying a target domain’s DNS servers to gather as many DNS records as possible. 
+**DNS Enumeration** is the systematic process of querying a target domain’s DNS servers to gather as many DNS records as possible.
 
 Since DNS (Domain Name System) translates human-readable hostnames into IP addresses, performing enumeration allows you to collect a comprehensive list of an organization’s servers, subdomains, and associated IP addresses.
 
@@ -779,7 +779,7 @@ From a defensive (blue team) perspective, DNS enumeration is vital for maintaini
 If you're ready, we can look at a hands-on command using **`dig`** to query a domain's records, or we can discuss how administrators block these types of reconnaissance scans! What would you like to do next?
 
 User: What safe tools can HackProof use?
-HackProof: As your cybersecurity learning assistant, I have access to a set of **safe diagnostic tools and commands** that we can run right here in your learning environment to inspect system configuration and network status. 
+HackProof: As your cybersecurity learning assistant, I have access to a set of **safe diagnostic tools and commands** that we can run right here in your learning environment to inspect system configuration and network status.
 
 These tools are categorized as "safe" because they are **read-only/information-gathering** commands. They do not alter system configurations, delete files, or perform harmful activities.
 
@@ -805,7 +805,7 @@ Crucial for troubleshooting network settings and verifying communication paths:
 ---
 
 ### How to use them:
-If you want me to run any of these commands to display system information, just tell me: 
+If you want me to run any of these commands to display system information, just tell me:
 *   *"run tool: [command_name]"* (For example: **`run tool: whoami`** or **`run tool: pwd`**).
 
 Which diagnostic tool would you like to execute first to check out our lab environment?
@@ -816,9 +816,9 @@ HackProof: Safe tool result:
 kali
 ```
 
-The current active logged-in user is **`kali`**. 
+The current active logged-in user is **`kali`**.
 
-This confirms that you are operating with standard user privileges inside this Kali Linux terminal environment. 
+This confirms that you are operating with standard user privileges inside this Kali Linux terminal environment.
 
 Where should we head next? We can check your current working directory by running **`run tool: pwd`**, list the files in this directory with **`run tool: ls`** (or let me know if you'd like to check out another networking concept)!
 
@@ -830,7 +830,7 @@ HackProof: Safe tool result:
 
 The current working directory is **`/home/kali/hackproof`**.
 
-This is the directory on the file system where our project and lab files are stored. 
+This is the directory on the file system where our project and lab files are stored.
 
 Now that we know our exact location inside the file system, would you like to list the files in this directory to see what's inside? We can do this by running **`run tool: ls`**!
 
@@ -858,13 +858,13 @@ HackProof: Safe tool result:
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host noprefixroute 
+    inet6 ::1/128 scope host noprefixroute
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
     link/ether 00:0c:29:61:55:90 brd ff:ff:ff:ff:ff:ff
     inet 192.168.204.128/24 brd 192.168.204.255 scope global dynamic noprefixroute eth0
        valid_lft 1121sec preferred_lft 1121sec
-    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute 
+    inet6 fe80::177f:1031:f804:1256/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 ```
 
@@ -885,7 +885,7 @@ Let’s analyze our system's network configuration! As we know, an **IP address*
 
 ---
 
-This is a great starting point for local network mapping. Now that we know our local IP address is **`192.168.204.128`**, would you like to see if there are any open ports listening on this machine? 
+This is a great starting point for local network mapping. Now that we know our local IP address is **`192.168.204.128`**, would you like to see if there are any open ports listening on this machine?
 
 We can run **`run tool: ss`** to check active network sockets and listening ports!
 
@@ -912,7 +912,7 @@ Looking at the output above, let's break down the active network service running
 2.  **State: `LISTEN`**
     *   This indicates that there is an active background process (a daemon or service) that is awake and waiting for incoming connection requests.
 3.  **Local Address:Port: `127.0.0.1:38975`**
-    *   **The IP (`127.0.0.1`):** As we learned from running `ip`, this is **localhost**. 
+    *   **The IP (`127.0.0.1`):** As we learned from running `ip`, this is **localhost**.
     *   **The Port (`38975`):** This is a random high-numbered dynamic/private port.
     *   **Security Insight (Defensive Binding):** Because the service is bound specifically to `127.0.0.1` (loopback) rather than `0.0.0.0` (which means "all interfaces"), **only applications running inside this machine can communicate with it**. External attackers on the `192.168.204.128` network cannot see or connect to this port! This is a classic, highly effective defensive security best practice.
 
@@ -940,7 +940,7 @@ Based on the pattern—**5 failed SSH login attempts from a single IP within 2 m
 As an analyst, you must determine if this is a true cyber attack or a false positive:
 
 *   **Scenario A: True Positive (Malicious Brute-Force)**
-    *   *Indicators:* The usernames requested are generic (e.g., `root`, `admin`, `guest`, `test`). The source IP is an unknown external address. 
+    *   *Indicators:* The usernames requested are generic (e.g., `root`, `admin`, `guest`, `test`). The source IP is an unknown external address.
     *   *Severity:* **Medium-to-High** (if password authentication is allowed).
 *   **Scenario B: False Positive (User Error / Misconfiguration)**
     *   *Indicators:* The source IP is an internal corporate IP address, and the target username matches a legitimate employee who just forgot their password, or there is an automated API backup script with an expired password.
@@ -982,10 +982,10 @@ Move SSH from default port 22 to a random high-numbered port (e.g., `Port 2222` 
 
 Would you like to explore how to look up authentication logs inside our Kali lab directory, or should we discuss how to securely write SSH keys?
 
-User: 
+User:
 HackProof: It looks like your message was sent before you could type your next question, **HackProof Student**! No worries at all.
 
-We were just discussing how to analyze an **SSH brute-force attack** and how to defend against it. 
+We were just discussing how to analyze an **SSH brute-force attack** and how to defend against it.
 
 Where would you like to go next?
 1.  **Learn how to check authentication logs** on a Linux system (like `/var/log/auth.log`) to spot these attacks?
@@ -996,14 +996,14 @@ Where would you like to go next?
 Let me know what you'd like to do! 🎓
 
 User: Analyze this security event: 5 failed SSH login attempts from the same IP within 2 minutes.
-HackProof: Let’s take your analysis of this **SSH brute-force event** to the next level, **HackProof Student**! 
+HackProof: Let’s take your analysis of this **SSH brute-force event** to the next level, **HackProof Student**!
 
 Since you are asking about this specific event again, let's look at it from a **practical, hands-on SOC security analyst's perspective**—specifically, how you would actually hunt down and investigate these 5 failed login attempts in a real Linux terminal.
 
 ---
 
 ### 1. The Threat Map: MITRE ATT&CK Framework
-In professional cybersecurity, we map events to the globally recognized **MITRE ATT&CK** database. 
+In professional cybersecurity, we map events to the globally recognized **MITRE ATT&CK** database.
 *   **Tactical Phase:** Credential Access (TA0006)
 *   **Technique:** **Brute Force (T1110)**
 *   **Sub-technique:** Password Guessing (T1110.001)
@@ -1013,7 +1013,7 @@ The actor is systematically trying to guess valid account credentials to establi
 ---
 
 ### 2. Practical Investigation: Hunting Logs in the Terminal
-If this happened on our Linux system, how would we investigate it? On Debian-based distributions (like Kali Linux), SSH authentication attempts are written to **`/var/log/auth.log`**. 
+If this happened on our Linux system, how would we investigate it? On Debian-based distributions (like Kali Linux), SSH authentication attempts are written to **`/var/log/auth.log`**.
 
 Here are the commands you would run to analyze this security event:
 
@@ -1043,7 +1043,7 @@ grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -
 *   This instantly alerts us that `192.168.1.50` is our prime suspect with 5 rapid failed attempts.
 
 #### Step C: Check for a successful breach (Critical Step!)
-The most critical question for a SOC analyst is: **Did they eventually get in?** 
+The most critical question for a SOC analyst is: **Did they eventually get in?**
 We search for any *accepted* connections from that offending IP address:
 ```bash
 grep "Accepted" /var/log/auth.log | grep "192.168.1.50"
@@ -1065,7 +1065,7 @@ sudo iptables -A INPUT -s 192.168.1.50 -j DROP
 Would you like to try simulating a log search or learn how to write a simple script to automatically block these brute-force IPs?
 
 User: Generate a SOC incident report for the simulated event of 5 failed SSH login attempts from the same IP within 2 minutes. Include incident summary, indicators, severity, MITRE ATT&CK mapping, evidence, impact, and defensive recommendations.
-HackProof: Here is a professional, comprehensive **SOC (Security Operations Center) Incident Report** template for the simulated SSH brute-force event. 
+HackProof: Here is a professional, comprehensive **SOC (Security Operations Center) Incident Report** template for the simulated SSH brute-force event.
 
 This report is structured according to industry-standard incident response frameworks and incorporates the real hostname and IP details we discovered in our lab environment!
 
@@ -1073,15 +1073,15 @@ This report is structured according to industry-standard incident response frame
 
 # 🛡️ SOC Incident Investigation Report
 
-**Incident ID:** INC-2025-0042  
-**Date/Time of Investigation:** January 25, 2025, 14:15 UTC  
-**Assigned Analyst:** HackProof Student 🎓  
-**Project/Affiliation:** HackProof AI  
+**Incident ID:** INC-2025-0042
+**Date/Time of Investigation:** January 25, 2025, 14:15 UTC
+**Assigned Analyst:** HackProof Student 🎓
+**Project/Affiliation:** HackProof AI
 
 ---
 
 ## 1. Executive Incident Summary
-On January 25, 2025, at approximately 14:02 UTC, the local host intrusion detection mechanism triggered an alert indicating suspicious activity targeting the remote access configuration on host **`kali`**. 
+On January 25, 2025, at approximately 14:02 UTC, the local host intrusion detection mechanism triggered an alert indicating suspicious activity targeting the remote access configuration on host **`kali`**.
 
 A single external IP address (**`192.168.1.50`**) initiated a rapid sequence of **5 failed SSH authentication attempts within a 2-minute window**. The host responded by denying access. No successful authentication occurred, and the attack was successfully mitigated.
 
@@ -1156,12 +1156,12 @@ sudo iptables -A INPUT -s 192.168.1.50 -j DROP
 
 ---
 
-**Report Status:** ✅ **RESOLVED & CLOSED**  
-**Lead Investigator:** `HackProof Student`  
+**Report Status:** ✅ **RESOLVED & CLOSED**
+**Lead Investigator:** `HackProof Student`
 **Reviewing Authority:** `HackProof AI Core`
 
 User: What is OSINT in cybersecurity?
-HackProof: **OSINT** stands for **Open Source Intelligence**. 
+HackProof: **OSINT** stands for **Open Source Intelligence**.
 
 In cybersecurity, OSINT refers to the practice of collecting, analyzing, and using **publicly available information** to gain insights into a target, organization, system, or individual.
 
@@ -1334,7 +1334,7 @@ In real-world cybersecurity, finding the right balance between these three pilla
 Would you like to test your knowledge with a quick 3-question practical scenario quiz to see which CIA pillar is impacted in real-world attacks?
 
 User: What is DNS enumeration?
-HackProof: **DNS Enumeration** is the process of locating and listing all accessible DNS records, subdomains, mail servers, and IP addresses associated with a specific domain. 
+HackProof: **DNS Enumeration** is the process of locating and listing all accessible DNS records, subdomains, mail servers, and IP addresses associated with a specific domain.
 
 In cybersecurity reconnaissance (the information-gathering phase), DNS enumeration helps security professionals and authorized penetration testers map out an organization’s digital footprint and expand their understanding of its attack surface.
 
@@ -1898,7 +1898,7 @@ HackProof: The **CIA Triad** is the foundational framework in cybersecurity used
 
 ### Balancing the Triad
 
-Security design often requires trade-offs among the three pillars. 
+Security design often requires trade-offs among the three pillars.
 * *Example:* Imposing strict multi-step MFA and heavy end-to-end encryption maximizes **Confidentiality**, but if the authentication system introduces high latency or frequent locked accounts, it can negatively impact **Availability** or usability.
 
 ---
@@ -1972,7 +1972,7 @@ HackProof: The **CIA Triad** is the fundamental benchmark model in cybersecurity
 ---
 
 ### Trade-Offs and Balance
-Effective security requires balancing all three pillars based on the specific needs of an organization. 
+Effective security requires balancing all three pillars based on the specific needs of an organization.
 * *Example:* Imposing extreme encryption and multi-step access controls maximizes **Confidentiality**, but if system latency increases significantly or locked-out users can't perform duties, **Availability** suffers.
 
 ---
@@ -2204,3 +2204,158 @@ Availability means ensuring authorized users can access systems and data when ne
 User: What is a firewall?
 HackProof: FIREWALL
 A firewall filters network traffic according to security rules and can allow or block connections.
+
+User: What is the CIA Triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is the difference between TCP and UDP?
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+User: Explain TCP and UDP and give 3 key differences between them
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+User: Explain TCP and UDP and give 3 key differences between them.
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+
+User: Explain TCP and UDP and give 3 key differences between them
+HackProof: TCP
+TCP is a connection-oriented transport protocol that provides reliable and ordered delivery of data.
+UDP
+UDP is a connectionless transport protocol that is faster and has less overhead than TCP, but it does not guarantee delivery.
+
+User: Explain TCP and UDP and give 3 key differences between them.
+HackProof: TCP vs UDP:<br>1. Connection: TCP is connection-oriented; UDP is connectionless.<br>2. Reliability: TCP provides reliable, ordered delivery; UDP does not guarantee delivery.<br>3. Overhead: TCP has more overhead, while UDP has less overhead and is generally faster.
+
+User: What is a firewall and what does it do?
+HackProof: FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
+
+
+User: What is zero trust security?
+HackProof: Zero Trust is a security model based on the principle of never trust, always verify. Every user, device, and request must be continuously authenticated and authorized before access is granted.
+
+User: What is the CIA Triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is a firewall?
+HackProof: FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
+
+User: What is the difference between TCP and UDP?
+HackProof: TCP vs UDP:<br>1. Connection: TCP is connection-oriented; UDP is connectionless.<br>2. Reliability: TCP provides reliable, ordered delivery; UDP does not guarantee delivery.<br>3. Overhead: TCP has more overhead, while UDP has less overhead and is generally faster.
+
+User: What is SQL injection?
+HackProof: **SQL INJECTION (SQLi)**
+
+SQL injection is a web security vulnerability that allows an attacker to interfere with the database queries made by an application. It occurs when untrusted user input is directly concatenated into a SQL query without proper sanitization or parameterization.
+
+* **How It Works:** An attacker inputs malicious SQL code (such as `' OR '1'='1`) into input fields or URL parameters to manipulate the query executed by the database.
+* **Impact:** Attackers can bypass authentication, read sensitive data, modify or delete database contents, and sometimes gain administrative control over the underlying server.
+* **Prevention:**
+  * Use **parameterized queries (prepared statements)**.
+  * Implement strict **input validation and sanitization**.
+  * Apply the **Principle of Least Privilege** to database user accounts.
+
+User: What is Cross-Site Scripting (XSS)?
+HackProof: **CROSS-SITE SCRIPTING (XSS)**
+
+Cross-Site Scripting (XSS) is a web security vulnerability that allows an attacker to inject malicious scripts (typically JavaScript) into web pages viewed by other users. It occurs when a web application includes untrusted user input in its output without proper validation or encoding.
+
+* **How It Works:** When a victim visits a compromised web page or clicks a malicious link, their web browser executes the injected script, treating it as trusted code coming from the legitimate application.
+* **Types of XSS:**
+  * **Stored XSS (Persistent):** The malicious script is permanently stored on the target server (e.g., in a database or comment section) and served to every user who loads that content.
+  * **Reflected XSS (Non-Persistent):** The script is reflected off the web server (e.g., through a search parameter or link) and executed immediately in the user's browser.
+  * **DOM-based XSS:** The vulnerability exists entirely in client-side code, where JavaScript handles unsafe user input to dynamically modify the Document Object Model (DOM).
+* **Impact:** Attackers can steal session cookies/tokens, impersonate users, deface websites, redirect users to malicious domains, or log keystrokes.
+* **Prevention:**
+  * Implement **Context-Aware Output Encoding** (e.g., HTML/JS entity encoding) before rendering dynamic data.
+  * Use **Content Security Policy (CSP)** headers to restrict script execution sources.
+  * Set **`HttpOnly`** flags on sensitive cookies to prevent script access.
+  * Perform strict **input validation and sanitization**.
+
+User: What is Cross-Site Request Forgery (CSRF)?
+HackProof: **CROSS-SITE REQUEST FORGERY (CSRF)**
+
+Cross-Site Request Forgery (CSRF or XSRF) is a web security vulnerability that tricks an authenticated user into submitting an unauthorized request to a trusted web application. It exploits the trust that a web application has in the user's browser and active session.
+
+* **How It Works:**
+  1. A user logs into a legitimate website (e.g., `bank.com`) and receives an active session cookie stored in their browser.
+  2. Without logging out, the user visits a malicious website or clicks a malicious link while their session is still active.
+  3. The malicious site automatically triggers a request to `bank.com` (such as a hidden form submission or script request to transfer funds or change account settings).
+  4. Because browsers automatically attach relevant session cookies to requests made to a destination domain, `bank.com` treats the incoming request as legitimate and performs the action on behalf of the user.
+
+* **Key Characteristic:** Unlike Cross-Site Scripting (XSS), which targets the user's trust in a website to execute malicious code, CSRF targets the server's trust in an authenticated user's browser session to perform unauthorized *state-changing* actions.
+
+* **Impact:**
+  * Unauthorized profile changes (e.g., updating email addresses or passwords).
+  * Financial fraud (e.g., initiating wire transfers or making unauthorized purchases).
+  * Administrative account takeover if an administrator's session is targeted.
+
+* **Prevention:**
+  * **Anti-CSRF Tokens:** Include unique, unpredictable, secret tokens in state-changing forms or API requests that the server validates before executing the action.
+  * **`SameSite` Cookie Attribute:** Configure session cookies with `SameSite=Strict` or `SameSite=Lax` to prevent browsers from sending cookies along with cross-site requests.
+  * **Re-Authentication:** Require users to re-enter their password or complete Multi-Factor Authentication (MFA) for sensitive actions.
+  * **Header Verification:** Validate the request's `Origin` and `Referer` headers on the server side to ensure requests originate from trusted domains.
+
+User: What is IDOR and how can it be prevented?
+HackProof: An Intrusion Detection System (IDS) monitors network or system activity and alerts security teams when it detects potentially malicious or suspicious behavior.
+
+User: What is the difference between authentication and authorization?
+HackProof: MULTI FACTOR AUTHENTICATION
+MFA requires two or more verification factors to improve account security.
+
+User: What is privilege escalation in cybersecurity?
+HackProof: A vulnerability is a weakness in a system, application, network, or process that could be exploited.
+
+User: What is the difference between authentication and authorization?
+HackProof: MULTI FACTOR AUTHENTICATION
+MFA requires two or more verification factors to improve account security.
+
+User: What is the difference between authentication and authorization?
+HackProof: MULTI FACTOR AUTHENTICATION
+MFA requires two or more verification factors to improve account security.
+
+User: What is the difference between authentication and authorization?
+HackProof: AUTHENTICATION vs AUTHORIZATION
+
+Authentication verifies the identity of a user or system. It answers: Who are you? Examples include passwords, biometrics, and multi-factor authentication.
+
+Authorization determines what an authenticated user or system is permitted to access or perform. It answers: What are you allowed to do? Examples include roles, permissions, and access-control rules.
+
+In simple terms: Authentication = identity verification. Authorization = permission and access control.
+
+User: What is privilege escalation in cybersecurity?
+HackProof: PRIVILEGE ESCALATION
+
+Privilege escalation is a security issue in which a user, process, or attacker gains higher privileges or permissions than they are authorized to have.
+
+Vertical privilege escalation occurs when a lower-privileged user gains higher privileges. Horizontal privilege escalation occurs when a user accesses another user's resources at a similar privilege level.
+
+Prevention includes least privilege, strong server-side access controls, secure configuration, timely patching, proper authorization checks, and monitoring for abnormal privilege changes.
+
+User: What is a firewall?
+HackProof: FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
+
+User: What is a firewall?
+HackProof: FIREWALL
+A firewall filters network traffic according to security rules and can allow or block connections.
+
+User: What is the CIA Triad?
+HackProof: CIA TRIAD
+Confidentiality means preventing unauthorized access to information.
+Integrity means protecting information from unauthorized modification.
+Availability means ensuring authorized users can access systems and data when needed.
+
+User: What is DNS?
+HackProof: DNS
+DNS translates domain names such as example.com into IP addresses.
