@@ -69,10 +69,64 @@ def retrieve_knowledge(question):
     q = question.lower().strip()
     q = re.sub(r"[^a-z0-9\s]", " ", q)
 
+    # High-priority concept routing: prevent generic keyword matching
+    # from returning a neighboring cybersecurity definition.
+    if (
+        ("authentication" in q and "authorization" in q)
+        or "authentication vs authorization" in q
+        or "difference between authentication and authorization" in q
+    ):
+        return (
+            "AUTHENTICATION vs AUTHORIZATION\n\n"
+            "Authentication verifies the identity of a user or system. "
+            "It answers: Who are you? Examples include passwords, biometrics, "
+            "and multi-factor authentication.\n\n"
+            "Authorization determines what an authenticated user or system "
+            "is permitted to access or perform. It answers: What are you "
+            "allowed to do? Examples include roles, permissions, and access-control rules.\n\n"
+            "In simple terms: Authentication = identity verification. "
+            "Authorization = permission and access control."
+        )
+
+    if (
+        "privilege escalation" in q
+        or "privilege-escalation" in q
+        or ("privilege" in q and "escalat" in q)
+    ):
+        return (
+            "PRIVILEGE ESCALATION\n\n"
+            "Privilege escalation is a security issue in which a user, process, "
+            "or attacker gains higher privileges or permissions than they are "
+            "authorized to have.\n\n"
+            "Vertical privilege escalation occurs when a lower-privileged user "
+            "gains higher privileges. Horizontal privilege escalation occurs "
+            "when a user accesses another user's resources at a similar privilege level.\n\n"
+            "Prevention includes least privilege, strong server-side access "
+            "controls, secure configuration, timely patching, proper authorization "
+            "checks, and monitoring for abnormal privilege changes."
+        )
+
+    if (
+        "idor" in q
+        or "insecure direct object reference" in q
+        or "bola" in q
+        or "broken object level authorization" in q
+    ):
+        return (
+            "IDOR / BOLA\n\n"
+            "Insecure Direct Object Reference (IDOR) is an access-control "
+            "vulnerability where an application exposes a reference to an object "
+            "such as an account, file, or record without properly verifying that "
+            "the requesting user is authorized to access it.\n\n"
+            "Prevention requires server-side authorization checks for every "
+            "object request, least privilege, appropriate access-control policies, "
+            "and never relying on predictable identifiers alone."
+        )
+
     stop_words = {
         "what", "is", "a", "an", "the",
         "explain", "tell", "me", "about",
-        "define", "please", "can", "you", "of"
+        "define", "please", "can", "you", "of", "security", "cybersecurity", "concept"
     }
 
     keywords = set(q.split()) - stop_words
@@ -81,6 +135,20 @@ def retrieve_knowledge(question):
         return "Please provide a more specific question."
 
     lines = [line.strip() for line in knowledge.splitlines()]
+
+    # Return both protocol entries for TCP/UDP comparison questions.
+    if {"tcp", "udp"}.issubset(keywords):
+        protocol_sections = []
+        for i, line in enumerate(lines):
+            if line.strip().upper() in {"TCP", "UDP"} and i + 1 < len(lines):
+                protocol_sections.extend([line.strip(), lines[i + 1].strip()])
+        if protocol_sections:
+            return (
+                "TCP vs UDP:<br>"
+                "1. Connection: TCP is connection-oriented; UDP is connectionless.<br>"
+                "2. Reliability: TCP provides reliable, ordered delivery; UDP does not guarantee delivery.<br>"
+                "3. Overhead: TCP has more overhead, while UDP has less overhead and is generally faster."
+            )
 
     best_start = None
     best_score = -1
@@ -928,6 +996,66 @@ def load_memory():
     return MEMORY_FILE.read_text(encoding="utf-8")[-12000:]
 
 def retrieve_memory_answer(question):
+    q = question.lower().strip()
+
+    # Priority routing for cybersecurity concepts.
+    # These checks run before generic keyword-overlap retrieval so related
+    # terms cannot incorrectly return a neighboring knowledge entry.
+    if ("authentication" in q and "authorization" in q) or "authentication vs authorization" in q or "authentication and authorization" in q:
+        return (
+            "AUTHENTICATION vs AUTHORIZATION\\n\\n"
+            "Authentication verifies who a user or system is. "
+            "Examples include passwords, biometrics, and multi-factor authentication.\\n\\n"
+            "Authorization determines what an authenticated user or system is allowed to access or perform. "
+            "Examples include permissions, roles, and access-control rules.\\n\\n"
+            "In simple terms: Authentication = Who are you? "
+            "Authorization = What are you allowed to do?"
+        )
+
+    if (
+        "privilege escalation" in q
+        or "privilege-escalation" in q
+        or ("escalate" in q and "privilege" in q)
+    ):
+        return (
+            "PRIVILEGE ESCALATION\\n\\n"
+            "Privilege escalation is a security issue in which a user, process, "
+            "or attacker gains higher privileges or permissions than they are authorized to have.\\n\\n"
+            "Types include vertical privilege escalation, where a lower-privileged user "
+            "gains higher privileges, and horizontal privilege escalation, where a user "
+            "accesses another user's resources at a similar privilege level.\\n\\n"
+            "Prevention includes strong access-control checks, least privilege, secure "
+            "configuration, timely patching, input validation, and monitoring for abnormal "
+            "privilege changes."
+        )
+
+    if (
+        "idor" in q
+        or "insecure direct object reference" in q
+        or "bola" in q
+        or "broken object level authorization" in q
+    ):
+        return (
+            "IDOR / BOLA\\n\\n"
+            "Insecure Direct Object Reference (IDOR) is an access-control vulnerability "
+            "where an application exposes a reference to an object, such as an account, "
+            "file, or record, without properly verifying that the requesting user is "
+            "authorized to access it. It is commonly associated with Broken Object Level "
+            "Authorization (BOLA) in APIs.\\n\\n"
+            "Prevention requires server-side authorization checks for every object request, "
+            "enforcing least privilege, using appropriate access-control policies, and "
+            "avoiding reliance on predictable identifiers alone."
+        )
+
+    if "broken access control" in q:
+        return (
+            "BROKEN ACCESS CONTROL\\n\\n"
+            "Broken access control occurs when an application fails to properly enforce "
+            "what authenticated users are allowed to access or do.\\n\\n"
+            "Prevention includes server-side authorization checks, least privilege, "
+            "deny-by-default policies, role-based access control, and testing every "
+            "protected resource and action."
+        )
     if not MEMORY_FILE.exists():
         return None
 
@@ -957,6 +1085,8 @@ def retrieve_memory_answer(question):
         )
 
         score = len(q_words & words)
+        if score < 2:
+            continue
 
         if score > best_score:
             best_score = score
