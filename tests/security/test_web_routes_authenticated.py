@@ -51,3 +51,24 @@ def test_authenticated_user_can_reach_analysis_page():
     response = client.get("/analysis")
 
     assert response.status_code == 200
+
+
+def test_authenticated_security_intelligence_includes_enrichment():
+    create_test_user()
+
+    client = app.test_client()
+    login_test_user(client)
+
+    response = client.post(
+        "/api/security-intelligence",
+        json={"input": "8.8.8.8"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.get_json()
+    assert data["type"] == "ip"
+    assert "enrichment" in data
+    assert data["enrichment"]["status"] == "not_configured"
+    assert data["enrichment"]["providers"] == []
+    assert data["enrichment"]["results"] == []

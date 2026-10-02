@@ -36,6 +36,7 @@ from scam_detector import analyze_scam, format_scam_result
 from unified_threat_analyzer import analyze_input, format_unified_result
 from threat_correlation import correlate_threat
 from security_intelligence import analyze_indicator, format_indicator_result
+from threat_intelligence import enrich_indicator
 
 
 def load_knowledge():
@@ -2878,6 +2879,8 @@ def security_intelligence_api():
 
     result = analyze_indicator(user_input)
 
+    enrichment = enrich_indicator(user_input)
+    result["enrichment"] = enrichment.get("enrichment", {})
     return jsonify(result)
 
 
